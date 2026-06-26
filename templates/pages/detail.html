@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="hero {% if page.hero_image %}hero--image{% endif %}" {% if page.hero_image %}style="--hero-image: url('{% static page.hero_image %}');"{% endif %}>
+    <div class="hero__inner">
+        <p class="eyebrow">{{ page.eyebrow }}</p>
+        <h1>{{ page.hero_title }}</h1>
+        <p class="hero__lead">{{ page.hero_lead }}</p>
+        {% if page.stats %}
+            <div class="hero-stats" aria-label="{% if page.language == 'en' %}Key facts{% else %}Ключевые факты{% endif %}">
+                {% for stat in page.stats %}
+                    <div class="hero-stat">
+                        <strong>{{ stat.value }}</strong>
+                        <span>{{ stat.label }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if page.cta_label %}
+            <a class="button button--primary" href="#lead-form">{{ page.cta_label }}</a>
+        {% endif %}
+    </div>
+</section>
+
+{% for section in page.sections %}
+    <section class="content-band {% cycle 'content-band--light' 'content-band--white' %}">
+        <div class="content-band__inner {% if section.image %}section-layout section-layout--{{ section.image_position|default:'right' }}{% endif %}">
+            <div class="section-main">
+                <div class="section-heading">
+                    <p class="eyebrow">{{ section.eyebrow|default:page.nav_title }}</p>
+                    <h2>{{ section.title }}</h2>
+                </div>
+                <div class="section-copy">
+                    {% for paragraph in section.body %}
+                        <p>{{ paragraph }}</p>
+                    {% endfor %}
+                </div>
+
+                {% if section.facts %}
+                    <div class="fact-grid">
+                        {% for fact in section.facts %}
+                            <div class="fact-card">
+                                <strong>{{ fact.value }}</strong>
+                                <span>{{ fact.label }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if section.bullets %}
+                    <div class="tile-grid tile-grid--bullets">
+                        {% for item in section.bullets %}
+                            <div class="tile">{{ item }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if section.cards %}
+                    <div class="card-grid card-grid--{{ section.card_style|default:'default' }}">
+                        {% for card in section.cards %}
+                            <article class="info-card {% if card.image %}info-card--person{% endif %}">
+                                {% if card.image %}
+                                    <img src="{% static card.image %}" alt="{{ card.alt|default:card.title }}" loading="lazy">
+                                {% endif %}
+                                <div>
+                                    {% if card.value %}<strong class="info-card__value">{{ card.value }}</strong>{% endif %}
+                                    <h3>{{ card.title }}</h3>
+                                    {% if card.meta %}<p class="info-card__meta">{{ card.meta }}</p>{% endif %}
+                                    {% if card.text %}<p>{{ card.text }}</p>{% endif %}
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if section.faq %}
+                    <div class="faq-list">
+                        {% for item in section.faq %}
+                            <details>
+                                <summary>{{ item.question }}</summary>
+                                <p>{{ item.answer }}</p>
+                            </details>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if section.links %}
+                    <div class="link-list">
+                        {% for link in section.links %}
+                            <a href="{{ link.url }}" {% if link.external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                                <span>{{ link.label }}</span>
+                                {% if link.note %}<small>{{ link.note }}</small>{% endif %}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if section.map %}
+                    <div class="map-panel">
+                        <div class="map-panel__content">
+                            <h3>{{ section.map.title }}</h3>
+                            <p>{{ section.map.address }}</p>
+                            {% if section.map.note %}<p>{{ section.map.note }}</p>{% endif %}
+                            <a class="button button--secondary" href="{{ section.map.url }}" target="_blank" rel="noopener noreferrer">
+                                {{ section.map.button_label }}
+                            </a>
+                        </div>
+                        <iframe
+                            src="{{ section.map.embed_url }}"
+                            title="{{ section.map.title }}"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if section.image %}
+                <figure class="section-media">
+                    <img src="{% static section.image.src %}" alt="{{ section.image.alt }}" loading="lazy">
+                    {% if section.image.caption %}
+                        <figcaption>{{ section.image.caption }}</figcaption>
+                    {% endif %}
+                </figure>
+            {% endif %}
+
+            {% if section.images %}
+                <div class="image-gallery image-gallery--{{ section.gallery_style|default:'mixed' }}">
+                    {% for image in section.images %}
+                        <figure>
+                            <img src="{% static image.src %}" alt="{{ image.alt }}" loading="lazy">
+                            {% if image.caption %}<figcaption>{{ image.caption }}</figcaption>{% endif %}
+                        </figure>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endfor %}
+
+{% if page.show_lead_form %}
+    {% include "includes/lead_form.html" %}
+{% endif %}
+{% endblock %}

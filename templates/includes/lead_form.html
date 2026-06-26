@@ -1,0 +1,60 @@
+<section class="lead-section" id="lead-form">
+    <div class="lead-section__inner">
+        <div class="section-heading">
+            <p class="eyebrow">{{ page.lead_form.eyebrow }}</p>
+            <h2>{{ page.lead_form.title }}</h2>
+            {% if page.lead_form.lead %}
+                <p>{{ page.lead_form.lead }}</p>
+            {% endif %}
+        </div>
+        <form class="lead-form" action="{% url 'leads:submit' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <input type="hidden" name="language" value="{{ page.language }}">
+
+            <label>
+                <span>{% if page.language == 'en' %}Request type{% else %}Тип заявки{% endif %}</span>
+                <select class="form-control" name="lead_type" required>
+                    {% for option in page.lead_form.types %}
+                        <option value="{{ option.value }}" {% if option.value == page.lead_form.default_type %}selected{% endif %}>{{ option.label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <label>
+                <span>{% if page.language == 'en' %}Name{% else %}Имя{% endif %}</span>
+                <input class="form-control" type="text" name="name" autocomplete="name" required>
+            </label>
+
+            <label>
+                <span>{% if page.language == 'en' %}Phone{% else %}Телефон{% endif %}</span>
+                <input class="form-control" type="tel" name="phone" autocomplete="tel" required>
+            </label>
+
+            <label>
+                <span>Email</span>
+                <input class="form-control" type="email" name="email" autocomplete="email">
+            </label>
+
+            <label class="lead-form__wide">
+                <span>{% if page.language == 'en' %}Comment{% else %}Комментарий{% endif %}</span>
+                <textarea class="form-control" name="message" rows="4"></textarea>
+            </label>
+
+            <label class="consent lead-form__wide">
+                <input type="checkbox" name="consent" required>
+                <span>
+                    {% if page.language == 'en' %}
+                        I agree to personal data processing under the <a href="/agreement-en">agreement</a>.
+                    {% else %}
+                        Я согласен на обработку персональных данных согласно <a href="/agreement">соглашению</a>.
+                    {% endif %}
+                </span>
+            </label>
+
+            <button class="button button--primary" type="submit">
+                {{ page.lead_form.submit_label }}
+            </button>
+        </form>
+    </div>
+</section>

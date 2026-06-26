@@ -1,0 +1,111 @@
+{% load static %}
+<!doctype html>
+<html lang="{{ current_language }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ page.title|default:site.name }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ page.hero_lead|default:'CLINISS - современный центр клинических исследований.' }}{% endblock %}">
+    <link rel="icon" href="{% static 'site/img/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'site/css/main.css' %}">
+</head>
+<body>
+    <a class="skip-link" href="#main">К содержанию</a>
+
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="{% if current_language == 'en' %}/en{% else %}/{% endif %}" aria-label="CLINISS">
+                <img src="{% static 'site/img/logo.svg' %}" alt="CLINISS">
+            </a>
+
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+                {% for group in navigation %}
+                    <div class="nav-group">
+                        <button class="nav-group__button" type="button">{{ group.title }}</button>
+                        <div class="nav-group__menu">
+                            {% for label, slug in group.items %}
+                                <a href="/{{ slug }}">{{ label }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </nav>
+
+            <div class="header-actions">
+                <form class="search-mini" action="/search" method="get">
+                    <input type="search" name="q" aria-label="Поиск" placeholder="{% if current_language == 'en' %}Search{% else %}Поиск{% endif %}">
+                </form>
+                <a class="phone-link" href="{{ site.mobile_phone_href }}">{{ site.mobile_phone }}</a>
+                {% if page.alternate_slug is not None %}
+                    <a class="language-link" href="{% if page.alternate_slug %}/{{ page.alternate_slug }}{% else %}/{% endif %}">
+                        {% if current_language == 'en' %}RU{% else %}EN{% endif %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+        {% if messages %}
+            <div class="message-stack" role="status">
+                {% for message in messages %}
+                    <div class="message message--{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer__inner">
+            <div>
+                <strong>{{ site.name }}</strong>
+                <p>{{ site.legal_name }}</p>
+                <p>{% if current_language == 'en' %}{{ site.address_en }}{% else %}{{ site.address_ru }}{% endif %}</p>
+            </div>
+            <div>
+                <a href="{{ site.phone_href }}">{{ site.phone }}</a>
+                <a href="{{ site.email_href }}">{{ site.email }}</a>
+                <a href="{{ site.telegram_url }}">Telegram</a>
+                <a href="{{ site.whatsapp_url }}">WhatsApp</a>
+                <a href="{{ site.vk_url }}">VK</a>
+            </div>
+            <div>
+                <a href="{% if current_language == 'en' %}/policy-en{% else %}/policy{% endif %}">
+                    {% if current_language == 'en' %}Privacy Policy{% else %}Политика конфиденциальности{% endif %}
+                </a>
+                <a href="{% if current_language == 'en' %}/agreement-en{% else %}/agreement{% endif %}">
+                    {% if current_language == 'en' %}Personal Data Agreement{% else %}Согласие на обработку данных{% endif %}
+                </a>
+                <p>© 2026 CLINISS</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="access-panel" id="access-panel" aria-label="Настройки доступности">
+        <button type="button" data-access-toggle="font">{% if current_language == 'en' %}A+{% else %}А+{% endif %}</button>
+        <button type="button" data-access-toggle="contrast">{% if current_language == 'en' %}Contrast{% else %}Контраст{% endif %}</button>
+        <button type="button" data-access-toggle="images">{% if current_language == 'en' %}Images{% else %}Фото{% endif %}</button>
+    </div>
+
+    <div class="cookie-banner" id="cookie-banner">
+        <p>
+            {% if current_language == 'en' %}
+                We use cookies to keep the site stable and improve the experience.
+            {% else %}
+                Мы используем cookies для стабильной работы сайта и улучшения опыта.
+            {% endif %}
+        </p>
+        <button type="button" data-cookie-accept>{% if current_language == 'en' %}OK{% else %}Понятно{% endif %}</button>
+    </div>
+
+    <script src="{% static 'site/js/main.js' %}" defer></script>
+</body>
+</html>

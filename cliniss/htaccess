@@ -1,0 +1,80 @@
+ErrorDocument 403 /404.html
+ErrorDocument 404 /404.html
+
+DirectoryIndex page58209527.html
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} /robots.txt
+RewriteCond "%{DOCUMENT_ROOT}/robots_%{HTTP_HOST}.txt" -f
+RewriteRule ^(.*)$ robots_%{HTTP_HOST}.txt [NC,L]
+RewriteRule ^center$ page58314007.html [NC]
+RewriteRule ^center/$ page58314007.html [NC]
+
+RewriteRule ^license$ page58348075.html [NC]
+RewriteRule ^license/$ page58348075.html [NC]
+
+RewriteRule ^employees$ page58349129.html [NC]
+RewriteRule ^employees/$ page58349129.html [NC]
+
+RewriteRule ^missions$ page58377779.html [NC]
+RewriteRule ^missions/$ page58377779.html [NC]
+
+RewriteRule ^system$ page58378151.html [NC]
+RewriteRule ^system/$ page58378151.html [NC]
+
+RewriteRule ^areaswork$ page58391019.html [NC]
+RewriteRule ^areaswork/$ page58391019.html [NC]
+
+RewriteRule ^price$ page58395753.html [NC]
+RewriteRule ^price/$ page58395753.html [NC]
+
+RewriteRule ^volunteers$ page58396361.html [NC]
+RewriteRule ^volunteers/$ page58396361.html [NC]
+
+RewriteRule ^contacts$ page58488963.html [NC]
+RewriteRule ^contacts/$ page58488963.html [NC]
+
+RewriteRule ^docs$ page118067706.html [NC]
+RewriteRule ^docs/$ page118067706.html [NC]
+
+RewriteRule ^issledovaniya-bioekvivalentnosti$ page125744266.html [NC]
+RewriteRule ^issledovaniya-bioekvivalentnosti/$ page125744266.html [NC]
+
+RewriteRule ^policy$ page58489203.html [NC]
+RewriteRule ^policy/$ page58489203.html [NC]
+
+RewriteRule ^agreement$ page117776556.html [NC]
+RewriteRule ^agreement/$ page117776556.html [NC]
+
+RewriteRule ^header$ page58315099.html [NC]
+RewriteRule ^header/$ page58315099.html [NC]
+
+RewriteRule ^footer$ page58315395.html [NC]
+RewriteRule ^footer/$ page58315395.html [NC]
+
+RewriteRule ^en$ page58557721.html [NC]
+RewriteRule ^en/$ page58557721.html [NC]
+
+RewriteRule ^center-en$ page58560037.html [NC]
+RewriteRule ^center-en/$ page58560037.html [NC]
+
+RewriteRule ^license-en$ page58562631.html [NC]
+RewriteRule ^license-en/$ page58562631.html [NC]
+
+RewriteRule ^employees-en$ page58562893.html [NC]
+RewriteRule ^employees-en/$ page58562893.html [NC]
+
+RewriteRule ^missions-en$ page58563225.html [NC]
+RewriteRule ^missions-en/$ page58563225.html [NC]
+
+RewriteRule ^system-en$ page58564013.html [NC]
+RewriteRule ^system-en/$ page58564013.html [NC]
+
+RewriteRule ^price-en$ page58564863.html [NC]
+RewriteRule ^price-en/$ page58564863.html [NC]
+
+RewriteRule ^contacts-en$ page58565173.html [NC]
+RewriteRule ^contacts-en/$ page58565173.html [NC]
+
+

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{% if current_language == 'en' %}Search{% else %}Поиск{% endif %} / CLINISS{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="page-head__inner">
+        <p class="eyebrow">{% if current_language == 'en' %}Site Search{% else %}Поиск по сайту{% endif %}</p>
+        <h1>{% if current_language == 'en' %}Search{% else %}Поиск{% endif %}</h1>
+        <form class="search-page" action="/search" method="get">
+            <input type="search" name="q" value="{{ query }}" placeholder="{% if current_language == 'en' %}Search query{% else %}Что найти{% endif %}">
+            <button class="button button--primary" type="submit">{% if current_language == 'en' %}Find{% else %}Найти{% endif %}</button>
+        </form>
+    </div>
+</section>
+
+<section class="content-band content-band--white">
+    <div class="content-band__inner">
+        {% if query %}
+            <div class="result-list">
+                {% for result in results %}
+                    <a class="result-item" href="{% if result.slug %}/{{ result.slug }}{% else %}/{% endif %}">
+                        <strong>{{ result.hero_title }}</strong>
+                        <span>{{ result.hero_lead }}</span>
+                    </a>
+                {% empty %}
+                    <p>{% if current_language == 'en' %}Nothing found.{% else %}Ничего не найдено.{% endif %}</p>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>{% if current_language == 'en' %}Enter a query to search the site.{% else %}Введите запрос для поиска по сайту.{% endif %}</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
