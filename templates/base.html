@@ -27,7 +27,7 @@
             <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
                 {% for group in navigation %}
                     <div class="nav-group">
-                        <button class="nav-group__button" type="button">{{ group.title }}</button>
+                        <button class="nav-group__button" type="button" aria-expanded="false">{{ group.title }}</button>
                         <div class="nav-group__menu">
                             {% for label, slug in group.items %}
                                 <a href="/{{ slug }}">{{ label }}</a>

@@ -109,6 +109,33 @@ def media(src, alt, caption=''):
     return {'src': src, 'alt': alt, 'caption': caption}
 
 
+def tilda_media(filename, language, index):
+    alt = (
+        f'Изображение страницы {index}'
+        if language == 'ru'
+        else f'Page image {index}'
+    )
+    return media(f'site/img/tilda/{filename}', alt)
+
+
+def source_image_section(language, filenames):
+    return {
+        'title': 'Изображения страницы' if language == 'ru' else 'Page Images',
+        'body': [
+            (
+                'Фотографии и графика исходного раздела.'
+                if language == 'ru'
+                else 'Photos and graphics from the source page.'
+            ),
+        ],
+        'images': [
+            tilda_media(filename, language, index)
+            for index, filename in enumerate(filenames, start=1)
+        ],
+        'gallery_style': 'source',
+    }
+
+
 def fact(value, label):
     return {'value': value, 'label': label}
 
@@ -178,57 +205,59 @@ CENTER_FACTS_EN = [
 ]
 
 AREAS_RU = [
-    card('Функциональная диагностика', 'Комплексные исследования для оценки и мониторинга работы органов и систем организма.'),
-    card('Клинические исследования', 'Оценка безопасности и эффективности новых методов лечения и лекарственных препаратов.'),
-    card('Кардиология', 'Исследования и разработка подходов к диагностике и лечению сердечно-сосудистых заболеваний.'),
+    card('Функциональная диагностика', 'Комплексные исследования для оценки и мониторинга работы органов и систем организма, выявления функциональных нарушений и уточнения диагностики.'),
+    card('Эндокринология', 'Исследования методов диагностики и лечения заболеваний эндокринной системы, коррекции гормональных нарушений и улучшения общего состояния пациентов.'),
+    card('Клинические исследования', 'Оценка безопасности и эффективности новых методов лечения и лекарственных препаратов с учетом требований качества, этики и регуляторного контроля.'),
+    card('Кардиология', 'Исследования и разработка подходов к диагностике и лечению сердечно-сосудистых заболеваний, направленные на улучшение качества жизни пациентов.'),
     card('Психиатрия и наркология', 'Изучение методов диагностики, лечения и поддержки пациентов с психическими расстройствами и зависимостями.'),
-    card('Ревматология', 'Исследования заболеваний суставов и соединительных тканей, направленные на снижение боли и улучшение подвижности.'),
-    card('Пульмонология', 'Новые методы диагностики и лечения заболеваний органов дыхания.'),
-    card('Травматология и ортопедия', 'Исследования восстановления и реабилитации при повреждениях опорно-двигательного аппарата.'),
-    card('Клиническая фармакология', 'Изучение воздействия лекарственных препаратов на организм, их эффективности и безопасности.'),
-    card('Неврология', 'Новые подходы к диагностике и лечению заболеваний нервной системы.'),
+    card('Ревматология', 'Исследования заболеваний суставов и соединительных тканей, направленные на снижение боли, улучшение подвижности и качества жизни.'),
+    card('Пульмонология', 'Исследования новых методов диагностики и лечения заболеваний органов дыхания, направленных на улучшение функции легких.'),
+    card('Травматология и ортопедия', 'Исследования восстановления и реабилитации при травмах и повреждениях опорно-двигательного аппарата.'),
+    card('Клиническая фармакология', 'Изучение воздействия лекарственных препаратов на организм, их эффективности, безопасности и возможностей оптимизации терапии.'),
+    card('Неврология', 'Разработка и оценка новых подходов к диагностике и лечению заболеваний нервной системы.'),
 ]
 
 AREAS_EN = [
-    card('Functional Diagnostics', 'Comprehensive testing to assess and monitor the function of organs and body systems.'),
-    card('Clinical Trials', 'Safety and efficacy evaluation of new treatment methods and medicines.'),
-    card('Cardiology', 'Research and development of approaches for cardiovascular diagnostics and therapy.'),
+    card('Functional Diagnostics', 'Comprehensive testing to assess and monitor organs and body systems, detect functional disorders, and support diagnostics.'),
+    card('Endocrinology', 'Studies of diagnostic and treatment methods for endocrine diseases, hormonal disorders, and overall patient health improvement.'),
+    card('Clinical Trials', 'Safety and efficacy evaluation of new treatment methods and medicines with quality, ethics, and regulatory control in mind.'),
+    card('Cardiology', 'Research and development of approaches for cardiovascular diagnostics and therapy aimed at improving quality of life.'),
     card('Psychiatry and Narcology', 'Diagnostics, treatment, and patient support in mental health and addiction studies.'),
     card('Rheumatology', 'Studies focused on joint and connective tissue diseases, pain reduction, and mobility.'),
-    card('Pulmonology', 'New diagnostics and treatment methods for respiratory diseases.'),
+    card('Pulmonology', 'Studies of new diagnostics and treatment methods for respiratory diseases and lung function improvement.'),
     card('Traumatology and Orthopedics', 'Recovery and rehabilitation studies for musculoskeletal injuries.'),
-    card('Clinical Pharmacology', 'Assessment of drug effects, safety, efficacy, and treatment optimization.'),
+    card('Clinical Pharmacology', 'Assessment of drug effects, efficacy, safety, and treatment optimization opportunities.'),
     card('Neurology', 'New approaches to diagnostics and treatment of nervous system diseases.'),
 ]
 
 VOLUNTEER_FAQ_RU = [
     {
         'question': 'Что я получу за участие в исследованиях?',
-        'answer': 'Интересно проведенное время, новые знакомства, бесплатную проверку здоровья и денежную компенсацию.',
+        'answer': 'Интересно проведенное время, новые знакомства, бесплатную проверку здоровья и денежную компенсацию, если она предусмотрена условиями конкретного протокола.',
     },
     {
         'question': 'Безопасны ли клинические исследования?',
-        'answer': 'Центр работает только с исследованиями, прошедшими необходимую оценку безопасности. Добровольца не включают в исследование при состояниях, которые могут повысить риск.',
+        'answer': 'Центр работает только с исследованиями, прошедшими необходимую оценку безопасности. Добровольца не включают в исследование при состояниях или заболеваниях, которые могут повысить риск. Команда стремится минимизировать риски на каждом этапе.',
     },
     {
         'question': 'Кто будет иметь доступ к персональным данным?',
-        'answer': 'Персональные и медицинские данные защищаются. При включении в исследование данные добровольца кодируются.',
+        'answer': 'Персональные данные и медицинская тайна защищаются. При включении в исследование данные добровольца кодируются, а доступ к ним получают только уполномоченные участники исследовательского процесса.',
     },
     {
         'question': 'Могу ли я привести с собой друзей или членов семьи?',
-        'answer': 'Да, если они соответствуют требованиям конкретного исследования. Каждый кандидат проходит отдельную анкету, информирование и скрининг.',
+        'answer': 'Да, если они соответствуют требованиям конкретного исследования. Каждый кандидат проходит отдельную анкету, информирование и скрининг; участие одного человека не гарантирует включение другого в тот же протокол.',
     },
     {
         'question': 'Как долго длится исследование?',
-        'answer': 'Срок зависит от протокола. Обычно есть стартовый визит, обследования и несколько визитов с пребыванием в центре от 24 до 48 часов.',
+        'answer': 'Срок зависит от протокола. Обычно есть стартовый визит, беседа с врачом, лабораторные и клинические обследования, затем несколько визитов. Часто каждый период пребывания в центре длится от 24 до 48 часов.',
     },
     {
         'question': 'Что такое клиническое исследование?',
-        'answer': 'Это заранее спланированное изучение лекарственного препарата или метода лечения с участием добровольцев и строгим медицинским наблюдением.',
+        'answer': 'Это комплекс мероприятий, который помогает вывести на рынок безопасный и эффективный лекарственный препарат. Клинические исследования проводятся по международным стандартам и регулируются российским законодательством.',
     },
     {
         'question': 'Может ли участие навредить мне?',
-        'answer': 'Перед включением оцениваются противопоказания и риски. Доброволец может отказаться от участия, а команда центра наблюдает за состоянием на каждом этапе.',
+        'answer': 'Любой медицинский препарат имеет ограничения и возможные побочные эффекты. Перед включением оцениваются противопоказания и риски, а во время исследования доброволец находится под медицинским наблюдением.',
     },
     {
         'question': 'Как часто можно участвовать?',
@@ -236,15 +265,15 @@ VOLUNTEER_FAQ_RU = [
     },
     {
         'question': 'Что если я принимаю другие лекарства?',
-        'answer': 'Обязательно сообщите об этом менеджеру и врачу. Решение об участии принимается только после медицинской оценки и требований протокола.',
+        'answer': 'Обязательно сообщите об этом менеджеру и врачу. Во время исследования часто запрещено принимать другие препараты, витамины и биологически активные добавки; сроки отмены зависят от протокола.',
     },
     {
         'question': 'У меня есть вредные привычки. Это повлияет на участие?',
-        'answer': 'Возможность участия зависит от конкретного исследования, результатов скрининга и критериев включения.',
+        'answer': 'Возможность участия зависит от протокола, результатов скрининга и критериев включения. Алкогольная или наркотическая зависимость обычно исключает участие. Курение может требовать временного отказа на период исследования.',
     },
     {
         'question': 'Что такое денежное вознаграждение?',
-        'answer': 'Это компенсация за время и соблюдение процедур исследования. Размер и порядок выплаты зависят от протокола.',
+        'answer': 'Это компенсация за время и соблюдение процедур исследования. Размер и порядок выплаты зависят от протокола; при нарушении правил исследования выплата может не полагаться.',
     },
     {
         'question': 'Что делать, если я согласен с условиями?',
@@ -255,31 +284,31 @@ VOLUNTEER_FAQ_RU = [
 VOLUNTEER_FAQ_EN = [
     {
         'question': 'What will I get for participating?',
-        'answer': 'A useful health check, new connections, time spent comfortably at the center, and financial compensation.',
+        'answer': 'A useful health check, new connections, time spent comfortably at the center, and financial compensation when it is provided by a specific protocol.',
     },
     {
         'question': 'Are clinical trials safe?',
-        'answer': 'The center works with studies that have passed the required safety assessment. A volunteer will not be enrolled if medical findings increase risk.',
+        'answer': 'The center works with studies that have passed the required safety assessment. A volunteer will not be enrolled if medical findings or health conditions increase risk.',
     },
     {
         'question': 'Who can access my personal data?',
-        'answer': 'Personal and medical data are protected. Once enrolled, volunteer data are coded.',
+        'answer': 'Personal and medical data are protected. Once enrolled, volunteer data are coded, and access is limited to authorized participants in the research process.',
     },
     {
         'question': 'Can I bring friends or family members?',
-        'answer': 'Yes, if they meet the requirements of a specific study. Every candidate completes a separate form, consent process, and screening.',
+        'answer': 'Yes, if they meet the requirements of a specific study. Every candidate completes a separate form, consent process, and screening; one person being eligible does not guarantee enrollment for another.',
     },
     {
         'question': 'How long does a study take?',
-        'answer': 'Timing depends on the protocol. Usually there is a start visit, medical checks, and several visits with a 24 to 48 hour stay at the center.',
+        'answer': 'Timing depends on the protocol. Usually there is a start visit, a physician conversation, lab and clinical checks, and several visits. A common stay format is 24 to 48 hours.',
     },
     {
         'question': 'What is a clinical study?',
-        'answer': 'It is a planned evaluation of a medicine or treatment method involving volunteers and strict medical supervision.',
+        'answer': 'It is a set of procedures that helps bring a safe and effective medicine to market. Clinical studies follow international standards and are regulated by Russian law.',
     },
     {
         'question': 'Can participation harm me?',
-        'answer': 'Risks and contraindications are assessed before enrollment. A volunteer may withdraw, and the center team monitors health throughout the study.',
+        'answer': 'Any medicine may have limitations and possible side effects. Contraindications and risks are assessed before enrollment, and the volunteer is medically monitored throughout the study.',
     },
     {
         'question': 'How often can I participate?',
@@ -287,15 +316,15 @@ VOLUNTEER_FAQ_EN = [
     },
     {
         'question': 'What if I take other medicines?',
-        'answer': 'Tell the manager and physician about all medicines. Participation is decided only after medical assessment and protocol review.',
+        'answer': 'Tell the manager and physician about all medicines. During many studies, other medicines, vitamins, and dietary supplements are restricted; timing depends on the protocol.',
     },
     {
         'question': 'Can habits affect participation?',
-        'answer': 'Eligibility depends on the study protocol, screening results, and inclusion criteria.',
+        'answer': 'Eligibility depends on the protocol, screening results, and inclusion criteria. Alcohol or drug dependence usually excludes participation. Smoking may need to be stopped during the study period.',
     },
     {
         'question': 'What is financial compensation?',
-        'answer': 'It is compensation for time and study procedures. The amount and payment process depend on the protocol.',
+        'answer': 'It is compensation for time and study procedures. The amount and payment process depend on the protocol; compensation may not be paid if study rules are violated.',
     },
     {
         'question': 'What should I do if I agree with the conditions?',
@@ -368,16 +397,16 @@ PAGES = {
     '': page(
         '',
         'ru',
-        'CLINISS - современный центр клинических исследований',
+        'CLINISS - Современный центр клинических исследований биоэквивалентности и ранних фаз',
         'Главная',
         'Современный центр клинических исследований',
         'CLINISS',
-        'Центр клинических исследований биоэквивалентности и ранних фаз с современным оборудованием, технологичной инфраструктурой и командой специалистов.',
+        'Центр ориентирован на проведение клинических исследований биоэквивалентности и ранних фаз, а также исследований эффективности, безопасности и терапевтической эквивалентности.',
         [
             {
                 'title': 'О центре',
                 'body': [
-                    'CLINISS оснащен новейшим оборудованием и ориентирован на проведение исследований биоэквивалентности, ранних фаз, эффективности, безопасности и терапевтической эквивалентности.',
+                    'CLINISS оснащен современным оборудованием и ориентирован на проведение исследований биоэквивалентности, ранних фаз, эффективности, безопасности и терапевтической эквивалентности.',
                     'В центре предусмотрены стационарное и амбулаторное отделения, процедурные кабинеты, преаналитическая лаборатория, контролируемый доступ и условия для комфортного пребывания добровольцев.',
                 ],
                 'facts': CENTER_FACTS_RU,
@@ -676,7 +705,7 @@ PAGES = {
         hero_image='site/img/graphics/proposal-banner.png',
         stats=[fact('9', 'специалистов в карточках'), fact('GCP', 'опыт исследований'), fact('4', 'ключевых направления команды')],
         form_title='Стать частью команды',
-        form_lead='Расскажите о себе и возможном формате сотрудничества с CLINISS.',
+        form_lead='Расскажите о себе и возможном формате сотрудничества с CLINISS. В комментарии можно оставить ссылку на резюме, например на hh.ru.',
         default_lead_type='team',
         lead_types=('team', 'question', 'callback'),
     ),
@@ -704,7 +733,7 @@ PAGES = {
         hero_image='site/img/graphics/proposal-banner.png',
         stats=[fact('9', 'specialists in profiles'), fact('GCP', 'clinical trial experience'), fact('4', 'key team areas')],
         form_title='Become Part of the Team',
-        form_lead='Tell us about yourself and the possible cooperation format with CLINISS.',
+        form_lead='Tell us about yourself and the possible cooperation format with CLINISS. You can add a link to your CV or profile in the comment.',
         default_lead_type='team',
         lead_types=('team', 'question', 'callback'),
     ),
@@ -830,7 +859,8 @@ PAGES = {
             {
                 'title': 'Исследовательские направления',
                 'body': [
-                    'CLINISS стремится к созданию и внедрению решений, которые могут улучшить качество жизни людей и дать новый импульс развитию медицинских технологий.',
+                    'CLINISS ориентирован на широкий спектр научных исследований, направленных на совершенствование и развитие медицины.',
+                    'Мы стремимся к созданию и внедрению решений, которые могут значительно улучшить качество жизни людей и дать новый импульс развитию медицинских технологий.',
                 ],
                 'cards': AREAS_RU,
                 'card_style': 'compact',
@@ -839,9 +869,13 @@ PAGES = {
             {
                 'title': 'Для добровольцев',
                 'body': [
-                    'Мы ищем добровольцев для участия в клинических исследованиях. Это возможность внести вклад в развитие медицины и помочь улучшить здоровье миллионов людей.',
+                    'Мы всегда ищем добровольцев для участия в передовых клинических исследованиях. Это возможность внести вклад в развитие медицины и помочь улучшить здоровье миллионов людей.',
+                    'Заполните анкету или закажите обратный звонок, чтобы начать путь к участию в исследованиях.',
                 ],
-                'links': [link('Узнать больше', '/volunteers', 'Раздел для добровольцев', external=False)],
+                'links': [
+                    link('Узнать больше', '/volunteers', 'Раздел для добровольцев', external=False),
+                    link('Заполнить анкету', '#lead-form', 'Форма на этой странице', external=False),
+                ],
                 'image': media('site/img/photos/volunteer-path.png', 'Путь добровольца в исследовании'),
                 'image_position': 'left',
             },
@@ -865,7 +899,8 @@ PAGES = {
             {
                 'title': 'Research Areas',
                 'body': [
-                    'CLINISS focuses on solutions that can improve quality of life and support the development of medical technologies.',
+                    'CLINISS focuses on a broad range of scientific studies aimed at improving and developing medicine.',
+                    'We work on solutions that can significantly improve quality of life and support the development of medical technologies.',
                 ],
                 'cards': AREAS_EN,
                 'card_style': 'compact',
@@ -873,8 +908,14 @@ PAGES = {
             },
             {
                 'title': 'For Volunteers',
-                'body': ['We invite volunteers to participate in clinical studies and contribute to the future of medicine.'],
-                'links': [link('Learn more', '/volunteers-en', 'Volunteer section', external=False)],
+                'body': [
+                    'We invite volunteers to participate in advanced clinical studies and contribute to the future of medicine.',
+                    'Fill out the form or request a callback to start your pathway toward participation.',
+                ],
+                'links': [
+                    link('Learn more', '/volunteers-en', 'Volunteer section', external=False),
+                    link('Fill out the form', '#lead-form', 'Form on this page', external=False),
+                ],
                 'image': media('site/img/photos/volunteer-path.png', 'Volunteer pathway in a study'),
                 'image_position': 'left',
             },
@@ -959,7 +1000,7 @@ PAGES = {
                 'title': 'Почему участвуют',
                 'body': [
                     'Во время исследования у вас будет возможность проконтролировать и оценить состояние своего здоровья, познакомиться с новыми людьми и провести время с пользой.',
-                    'Участие здоровых добровольцев в клинических исследованиях оплачивается, если это предусмотрено конкретным протоколом.',
+                    'Для здоровых добровольцев участие в клинических исследованиях - это не только возможность помочь современной медицине. Участие оплачивается, если это предусмотрено конкретным протоколом.',
                 ],
                 'image': media('site/img/photos/volunteer-path.png', 'Путь добровольца в клиническом исследовании'),
             },
@@ -971,10 +1012,10 @@ PAGES = {
             {
                 'title': 'Кому подходит участие',
                 'body': [
-                    'К участию приглашаются лица старше 18 лет без острых заболеваний и без противопоказаний по критериям конкретного протокола.',
+                    'К участию приглашаются лица старше 18 лет без острых и хронических заболеваний, а также без противопоказаний по критериям конкретного протокола.',
                     'Перед включением доброволец проходит информированное согласие, медицинский осмотр и скрининг.',
                 ],
-                'bullets': ['Старше 18 лет', 'Без острых заболеваний', 'Без противопоказаний протокола', 'Информированное согласие', 'Медицинский скрининг'],
+                'bullets': ['Старше 18 лет', 'Без острых и хронических заболеваний', 'Без противопоказаний протокола', 'Беременные и кормящие женщины не участвуют', 'Информированное согласие', 'Медицинский скрининг'],
                 'image': media('site/img/photos/outpatient-checkup.jpeg', 'Скрининг добровольца в CLINISS'),
                 'image_position': 'left',
             },
@@ -991,7 +1032,7 @@ PAGES = {
         hero_image='site/img/photos/volunteer-path.png',
         stats=[fact('18+', 'возраст добровольцев'), fact('3 мес.', 'обычный интервал участия'), fact('24-48 ч', 'частый формат пребывания')],
         form_title='Анкета добровольца',
-        form_lead='Оставьте контакты, чтобы менеджер рассказал о ближайших наборах и условиях скрининга.',
+        form_lead='Оставьте контакты, возраст и короткий комментарий о готовности участвовать. Менеджер расскажет о ближайших наборах и условиях скрининга.',
         default_lead_type='volunteer',
         lead_types=('volunteer', 'callback', 'study', 'question'),
     ),
@@ -1008,7 +1049,7 @@ PAGES = {
                 'title': 'Why People Participate',
                 'body': [
                     'During a study you can check your health, meet new people, and spend time usefully.',
-                    'Participation of healthy volunteers is compensated when provided by the study protocol.',
+                    'For healthy volunteers, participation is also an opportunity to support modern medicine. Participation is compensated when provided by the study protocol.',
                 ],
                 'image': media('site/img/photos/volunteer-path.png', 'Volunteer pathway in a clinical study'),
             },
@@ -1020,10 +1061,10 @@ PAGES = {
             {
                 'title': 'Who Can Participate',
                 'body': [
-                    'Participation is open to people over 18 without acute diseases and without contraindications under a specific protocol.',
+                    'Participation is open to people over 18 without acute or chronic diseases and without contraindications under a specific protocol.',
                     'Before enrollment, every volunteer goes through informed consent, medical examination, and screening.',
                 ],
-                'bullets': ['Over 18 years old', 'No acute diseases', 'No protocol contraindications', 'Informed consent', 'Medical screening'],
+                'bullets': ['Over 18 years old', 'No acute or chronic diseases', 'No protocol contraindications', 'Pregnant and breastfeeding women do not participate', 'Informed consent', 'Medical screening'],
                 'image': media('site/img/photos/outpatient-checkup.jpeg', 'Volunteer screening at CLINISS'),
                 'image_position': 'left',
             },
@@ -1040,7 +1081,7 @@ PAGES = {
         hero_image='site/img/photos/volunteer-path.png',
         stats=[fact('18+', 'volunteer age'), fact('3 mo.', 'typical interval'), fact('24-48 h', 'common stay format')],
         form_title='Volunteer Form',
-        form_lead='Leave your contact details so a manager can explain current recruitment and screening conditions.',
+        form_lead='Leave your contact details, age, and a short comment about your readiness to participate. A manager will explain current recruitment and screening conditions.',
         default_lead_type='volunteer',
         lead_types=('volunteer', 'callback', 'study', 'question'),
     ),
@@ -1131,15 +1172,15 @@ PAGES = {
         'Нормативные документы',
         'Документы',
         'Нормативные документы',
-        'Раздел содержит сведения о контролирующих органах, лекарственном обеспечении, правилах участия и внешние нормативные ссылки.',
+        'Раздел содержит сведения о контролирующих органах, лекарственном обеспечении, правилах записи добровольцев, подготовке к исследованиям, госпитализации и порядке оказания услуг.',
         [
             {
                 'title': 'Контролирующие органы',
                 'body': [
-                    'Единый номер горячей линии Министерства здравоохранения Тверской области - 122. По нему можно задать вопросы о доступности и качестве медицинской помощи, лекарственном обеспечении, диспансеризации и профосмотрах.',
+                    'Единый номер горячей линии Министерства здравоохранения Тверской области - 122. По нему можно задать вопросы о доступности и качестве медицинской помощи, обеспечении льготными лекарственными препаратами, диспансеризации и профилактических осмотрах. Короткий номер 122 действует во всех регионах страны.',
                     'Министерство здравоохранения Тверской области: 170100, г. Тверь, улица Ивана Седых, 8; тел./факс: (4822) 33-32-55; dep_zdrav@tverreg.ru.',
                     'Территориальный орган Росздравнадзора по Тверской области: (4822) 35-85-88; rzntver@reg69.roszdravnadzor.gov.ru; 170100, г. Тверь, ул. Советская, д. 35, корпус 1.',
-                    'Управление Роспотребнадзора по Тверской области: 170034, г. Тверь, ул. Дарвина, д. 17; тел. (4822) 34-22-11.',
+                    'Управление Роспотребнадзора по Тверской области: 170034, г. Тверь, ул. Дарвина, д. 17; тел. (4822) 34-22-11; факс: (4822) 35-61-85, 32-06-20.',
                 ],
             },
             {
@@ -1157,15 +1198,18 @@ PAGES = {
                 'title': 'Правила участия и оказания услуг',
                 'body': [
                     'Запись добровольцев на участие в клинических исследованиях осуществляется после заполнения анкеты на сайте или в официальных социальных сетях центра. После обработки данных менеджер связывается с кандидатом для уточнения деталей и назначения времени визита на скрининг.',
-                    'Стандартный консультативный прием граждан вне рамок протоколов клинических исследований в центре не ведется. Обследования и медицинские вмешательства выполняются только для лиц, включенных в программы клинических исследований.',
-                    'Центр не участвует в реализации программы ОМС и не ведет прием граждан по полисам обязательного медицинского страхования.',
+                    'В рамках клинических исследований в центре проводятся ЭКГ, забор биоматериала натощак и осмотры врачей-исследователей. Каждый протокол уникален, поэтому требования к подготовке могут различаться; подробные инструкции доброволец получает от координатора проекта.',
+                    'На базе центра функционирует стационарное отделение для пребывания участников исследований. Сроки, порядок и условия госпитализации определяются исключительно протоколом конкретного клинического исследования.',
+                    'Стандартный консультативный прием граждан вне рамок протоколов клинических исследований не ведется. Центр не оказывает платные медицинские услуги населению, не участвует в реализации программы ОМС и не ведет прием граждан по полисам обязательного медицинского страхования.',
+                    'Все обследования, медицинские вмешательства и манипуляции выполняются только для лиц, включенных в программы клинических исследований, и проводятся бесплатно для участника за счет средств спонсора исследования.',
                 ],
-                'bullets': ['Запись после анкеты', 'Индивидуальная подготовка по протоколу', 'Госпитализация только в рамках исследования', 'Платные медицинские услуги населению не оказываются', 'ОМС не ведется'],
+                'bullets': ['Запись после анкеты', 'Скрининг после связи с менеджером', 'Индивидуальная подготовка по протоколу', 'ЭКГ и забор биоматериала по программе исследования', 'Госпитализация только в рамках исследования', 'Плановая медицинская помощь вне исследований не оказывается', 'Платные медицинские услуги населению не оказываются', 'ОМС не ведется', 'Диспансеризация и профилактические осмотры населения не проводятся'],
             },
             {
                 'title': 'Прием граждан и согласия',
                 'body': [
                     'Прием граждан проводится в последнюю среду месяца с 10:00 до 13:00.',
+                    'В соответствии с Федеральным законом № 323-ФЗ каждый гражданин имеет право на получение медицинской помощи в рамках программы государственных гарантий. Поскольку CLINISS не участвует в реализации территориальной программы государственных гарантий, по вопросам плановой медицинской помощи и диспансеризации рекомендуется обращаться в поликлиники по месту прикрепления.',
                     'На исходном сайте отдельно размещены политика об обработке персональных данных и информированное добровольное согласие на медицинское вмешательство. Эти внешние ссылки сохранены в новом разделе документов.',
                 ],
                 'links': [
@@ -1186,15 +1230,15 @@ PAGES = {
         'Documents',
         'Documents',
         'Regulatory Documents',
-        'This section contains regulatory authority details, medicine support links, participation rules, and external regulatory references.',
+        'This section contains regulatory authority details, medicine support links, volunteer enrollment rules, preparation requirements, hospitalization rules, and service information.',
         [
             {
                 'title': 'Regulatory Authorities',
                 'body': [
-                    'The Ministry of Health hotline for the Tver Region is 122. It can be used for questions about access to care, quality of care, medicines, and preventive checkups.',
+                    'The Ministry of Health hotline for the Tver Region is 122. It can be used for questions about access to care, quality of care, medicine support, preventive checkups, and scheduled examinations.',
                     'Tver Region Ministry of Health: 8 Ivan Sedykh St., Tver; phone/fax: (4822) 33-32-55; dep_zdrav@tverreg.ru.',
                     'Roszdravnadzor territorial body for the Tver Region: (4822) 35-85-88; rzntver@reg69.roszdravnadzor.gov.ru; 35 Sovetskaya St., building 1, Tver.',
-                    'Rospotrebnadzor for the Tver Region: 17 Darvina St., Tver; phone: (4822) 34-22-11.',
+                    'Rospotrebnadzor for the Tver Region: 17 Darvina St., Tver; phone: (4822) 34-22-11; fax: (4822) 35-61-85, 32-06-20.',
                 ],
             },
             {
@@ -1210,14 +1254,18 @@ PAGES = {
                 'title': 'Participation and Service Rules',
                 'body': [
                     'Volunteer enrollment starts after a form is submitted on the site or through official social channels. A manager contacts the candidate to clarify details and schedule screening.',
-                    'The center does not provide routine outpatient consultations outside clinical trial protocols and does not participate in compulsory medical insurance programs.',
+                    'Within clinical trials, the center may perform ECG, fasting biomaterial collection, and examinations by investigators. Every protocol is unique, so preparation requirements may differ; detailed instructions are provided by the project coordinator.',
+                    'The center has an inpatient department for study participants. Timing, procedure, and hospitalization conditions are determined only by the protocol of the specific clinical study.',
+                    'The center does not provide routine outpatient consultations outside clinical trial protocols, does not provide paid medical services to the public, and does not participate in compulsory medical insurance programs.',
+                    'All examinations and medical procedures are performed only for people enrolled in clinical trial programs and are free of charge for participants because they are funded by the study sponsor.',
                 ],
-                'bullets': ['Enrollment after form submission', 'Protocol-specific preparation', 'Hospitalization only within a study', 'No paid medical services for the public', 'No compulsory medical insurance reception'],
+                'bullets': ['Enrollment after form submission', 'Screening after manager contact', 'Protocol-specific preparation', 'ECG and biomaterial collection according to the study program', 'Hospitalization only within a study', 'No routine medical care outside studies', 'No paid medical services for the public', 'No compulsory medical insurance reception', 'No public preventive checkups'],
             },
             {
                 'title': 'Public Reception and Consent Forms',
                 'body': [
                     'Public reception is held on the last Wednesday of each month from 10:00 to 13:00.',
+                    'Because CLINISS does not participate in the territorial state guarantees program, people seeking routine medical care or preventive checkups should contact clinics at their place of attachment.',
                     'The original site provides separate downloadable documents for the personal data processing policy and informed voluntary consent for medical intervention. These external links are preserved here.',
                 ],
                 'links': [
@@ -1238,13 +1286,14 @@ PAGES = {
         'Исследования биоэквивалентности',
         'Исследования',
         'Исследования биоэквивалентности',
-        'Исследования проводятся для сравнения фармакокинетического профиля исследуемого препарата с референтным препаратом.',
+        'Исследования проводятся для сравнения фармакокинетического профиля исследуемого препарата с уже существующим препаратом и определения их биоэквивалентности.',
         [
             {
                 'title': 'Что такое биоэквивалентность',
                 'body': [
                     'Исследование проводится для сравнения фармакокинетического профиля исследуемого препарата с уже существующим препаратом и определения их биоэквивалентности.',
-                    'CLINISS провел до 50 клинических исследований в области биоэквивалентности, эффективности, безопасности и терапевтической эквивалентности.',
+                    'CLINISS провел до 50 клинических исследований в области биоэквивалентности, эффективности, безопасности и терапевтической эквивалентности. Центр создает безопасную и комфортную среду для участников, использует современные технологии и соблюдает принципы GCP.',
+                    'В России дженерики занимают значимую долю рынка лекарств, а их вывод на рынок тщательно регламентируется. Процедура одобрения и оборот таких лекарственных средств находятся под надзором Министерства здравоохранения и Росздравнадзора.',
                 ],
                 'facts': [fact('50', 'завершенных исследований'), fact('600', 'добровольцев успешно прошли исследование')],
                 'image': media('site/img/photos/bioequivalence-lab.png', 'Лабораторный анализ биоэквивалентности'),
@@ -1253,14 +1302,22 @@ PAGES = {
                 'title': 'Путь добровольца',
                 'body': ['Участие строится по протоколу исследования и включает несколько этапов от первичного отбора до завершения визитов.'],
                 'cards': [
-                    card('Рекрутинг', 'Поиск и предварительный отбор добровольцев по основным требованиям исследования.'),
-                    card('Скрининг', 'Медицинское обследование, анализы и сбор анамнеза для проверки критериев протокола.'),
-                    card('Госпитализация', 'Прибытие в центр и подготовка к активной части исследования.'),
-                    card('Дозинг', 'Прием исследуемого препарата под медицинским наблюдением и сбор данных.'),
-                    card('Амбулаторные визиты', 'Контрольные осмотры и анализы после выписки.'),
+                    card('Рекрутинг', 'Поиск и привлечение добровольцев, информирование об исследовании и предварительный отбор по основным требованиям.'),
+                    card('Скрининг', 'Комплексное медицинское обследование, анализы и сбор анамнеза для проверки критериев протокола и безопасности участия.'),
+                    card('Госпитализация', 'Прибытие включенных добровольцев в центр, размещение и подготовка к активной части исследования.'),
+                    card('Дозинг', 'Прием исследуемого препарата под строгим медицинским наблюдением, контроль состояния и сбор необходимых данных.'),
+                    card('Амбулаторные визиты', 'Контрольные осмотры, дополнительные анализы и оценка состояния после выписки для формирования полной картины профиля препарата.'),
                 ],
                 'image': media('site/img/photos/bioequivalence-screening.png', 'Скрининг добровольцев'),
                 'image_position': 'left',
+            },
+            {
+                'title': 'Актуальные исследования',
+                'body': [
+                    'Наборы добровольцев зависят от активных протоколов. На сайте можно оставить заявку на участие, а менеджер уточнит возрастные критерии, график визитов, размер компенсации и статус набора.',
+                    'Если набор по конкретному исследованию остановлен, кандидат может быть внесен в базу добровольцев и получить информацию о следующих подходящих исследованиях.',
+                ],
+                'bullets': ['Возрастные критерии зависят от протокола', 'График визитов сообщается перед скринингом', 'Компенсация определяется условиями исследования', 'Участие начинается только после информированного согласия и скрининга'],
             },
         ],
         cta_label='Запросить предложение',
@@ -1278,13 +1335,14 @@ PAGES = {
         'Bioequivalence Studies',
         'Studies',
         'Bioequivalence Studies',
-        'Bioequivalence studies compare the pharmacokinetic profile of an investigational product with a reference product.',
+        'Bioequivalence studies compare the pharmacokinetic profile of an investigational medicine with an existing product and evaluate their bioequivalence.',
         [
             {
                 'title': 'What Bioequivalence Means',
                 'body': [
                     'The study compares the pharmacokinetic profile of the investigational medicine with an existing reference product and evaluates their bioequivalence.',
-                    'CLINISS has conducted up to 50 clinical studies in bioequivalence, efficacy, safety, and therapeutic equivalence.',
+                    'CLINISS has conducted up to 50 clinical studies in bioequivalence, efficacy, safety, and therapeutic equivalence. The center creates a safe and comfortable environment for participants, uses modern technologies, and follows GCP principles.',
+                    'Generic medicines represent a significant part of the pharmaceutical market, and their market entry is carefully regulated. Approval and circulation of these medicines are supervised by the Ministry of Health and Roszdravnadzor.',
                 ],
                 'facts': [fact('50', 'completed studies'), fact('600', 'volunteers successfully completed studies')],
                 'image': media('site/img/photos/bioequivalence-lab.png', 'Bioequivalence laboratory analysis'),
@@ -1293,14 +1351,22 @@ PAGES = {
                 'title': 'Volunteer Pathway',
                 'body': ['Participation follows a study protocol and includes several stages from initial recruitment to follow-up visits.'],
                 'cards': [
-                    card('Recruitment', 'Search and preliminary selection of volunteers by study requirements.'),
-                    card('Screening', 'Medical checks, tests, and history collection to confirm protocol criteria.'),
-                    card('Hospitalization', 'Arrival at the center and preparation for the active study phase.'),
-                    card('Dosing', 'Administration of the investigational product under medical supervision.'),
-                    card('Outpatient Visits', 'Follow-up examinations and tests after discharge.'),
+                    card('Recruitment', 'Searching for volunteers, informing them about the study, and preliminary selection according to key requirements.'),
+                    card('Screening', 'Comprehensive medical examination, tests, and history collection to confirm protocol criteria and participation safety.'),
+                    card('Hospitalization', 'Arrival of enrolled volunteers at the center, accommodation, and preparation for the active study phase.'),
+                    card('Dosing', 'Administration of the investigational product under strict medical supervision, health monitoring, and data collection.'),
+                    card('Outpatient Visits', 'Follow-up examinations, additional tests, and post-discharge assessment to complete the medicine profile.'),
                 ],
                 'image': media('site/img/photos/bioequivalence-screening.png', 'Volunteer screening'),
                 'image_position': 'left',
+            },
+            {
+                'title': 'Current Studies',
+                'body': [
+                    'Volunteer recruitment depends on active protocols. A candidate can submit a participation request, and a manager will clarify age criteria, visit schedule, compensation, and recruitment status.',
+                    'If recruitment for a specific study is closed, the candidate may be added to the volunteer database and informed about future suitable studies.',
+                ],
+                'bullets': ['Age criteria depend on the protocol', 'Visit schedule is explained before screening', 'Compensation is defined by study conditions', 'Participation starts only after informed consent and screening'],
             },
         ],
         cta_label='Request a Proposal',
@@ -1318,32 +1384,69 @@ PAGES = {
         'Политика конфиденциальности',
         'Правовая информация',
         'Политика конфиденциальности',
-        'Политика описывает порядок обработки и защиты персональных данных пользователей сайта CLINISS.',
+        'Политика в отношении обработки персональных данных описывает цели, принципы, условия обработки и меры защиты персональных данных пользователей сайта CLINISS.',
         [
             {
-                'title': 'Оператор и общие положения',
+                'title': 'Общие положения',
                 'body': [
-                    'Оператором персональных данных является ООО «АРС Клинический Центр». Пользователь может получить разъяснения по вопросам обработки персональных данных по адресу info@arsclinic.ru.',
-                    'Политика применяется ко всей информации, которую сайт может получить о пользователе во время использования сайта, форм обратной связи и сервисов коммуникации.',
+                    'Настоящая политика обработки персональных данных составлена в соответствии с требованиями Федерального закона от 27.07.2006 № 152-ФЗ «О персональных данных».',
+                    'Оператором персональных данных является ООО «АРС Клинический Центр». Оператор считает соблюдение прав и свобод человека при обработке персональных данных одним из важных условий своей деятельности.',
+                    'Политика применяется ко всей информации, которую Оператор может получить о посетителях веб-сайта https://cliniss.ru, включая сведения из форм обратной связи и технические данные использования сайта.',
+                ],
+            },
+            {
+                'title': 'Основные понятия',
+                'body': [
+                    'Персональные данные - любая информация, относящаяся прямо или косвенно к определенному или определяемому пользователю сайта.',
+                    'Обработка персональных данных включает сбор, запись, систематизацию, накопление, хранение, уточнение, использование, передачу, обезличивание, блокирование, удаление и уничтожение персональных данных.',
+                    'Автоматизированная обработка означает обработку персональных данных с помощью средств вычислительной техники. Обезличивание означает действия, после которых невозможно определить принадлежность данных конкретному пользователю без дополнительной информации.',
+                ],
+            },
+            {
+                'title': 'Права и обязанности Оператора',
+                'body': [
+                    'Оператор вправе получать от субъекта персональных данных достоверную информацию и документы, содержащие персональные данные.',
+                    'Оператор обязан организовывать обработку персональных данных в порядке, установленном законодательством РФ, отвечать на обращения субъектов персональных данных и обеспечивать доступ к настоящей Политике.',
+                    'Оператор принимает правовые, организационные и технические меры для защиты персональных данных от неправомерного или случайного доступа, уничтожения, изменения, блокирования, копирования, предоставления и распространения.',
+                ],
+            },
+            {
+                'title': 'Права пользователя',
+                'body': [
+                    'Пользователь вправе получать информацию, касающуюся обработки его персональных данных, требовать уточнения, блокирования или уничтожения данных, если они являются неполными, устаревшими, неточными, незаконно полученными или не являются необходимыми для заявленной цели обработки.',
+                    'Пользователь вправе отозвать согласие на обработку персональных данных и направить требование о прекращении обработки. Пользователь также вправе обжаловать неправомерные действия или бездействие Оператора в уполномоченный орган или в суд.',
+                    'Пользователь обязан предоставлять Оператору достоверные данные о себе и сообщать об их уточнении, обновлении или изменении.',
+                ],
+            },
+            {
+                'title': 'Принципы обработки',
+                'body': [
+                    'Обработка персональных данных осуществляется на законной и справедливой основе, ограничивается достижением конкретных, заранее определенных и законных целей.',
+                    'Оператор не допускает обработки персональных данных, несовместимой с целями сбора, и не объединяет базы данных, обработка которых осуществляется в несовместимых целях.',
+                    'Содержание и объем обрабатываемых персональных данных соответствуют заявленным целям. При обработке обеспечиваются точность, достаточность и актуальность персональных данных.',
                 ],
             },
             {
                 'title': 'Цели и категории данных',
                 'body': [
-                    'Данные обрабатываются для обратной связи, обработки заявок, записи кандидатов на исследования, ведения внутреннего учета обращений, улучшения качества сайта и выполнения требований законодательства.',
-                    'К обрабатываемым данным относятся имя, телефон, email, комментарии пользователя, сведения из форм, технические данные браузера, IP-адрес и cookie.',
+                    'Персональные данные обрабатываются для информирования пользователя, обработки заявок и обращений, записи кандидатов на исследования, обратной связи, ведения внутреннего учета обращений, улучшения качества сайта и выполнения требований законодательства РФ.',
+                    'К обрабатываемым данным могут относиться фамилия, имя, отчество, телефон, email, комментарии пользователя, сведения из форм, технические данные браузера, IP-адрес и cookie.',
+                    'Типовые действия с данными: сбор, запись, систематизация, накопление, хранение, уточнение, использование, уничтожение и обезличивание.',
                 ],
             },
             {
-                'title': 'Права пользователя и безопасность',
+                'title': 'Условия обработки и передачи',
                 'body': [
-                    'Пользователь вправе уточнять, блокировать или удалять персональные данные, если они являются неполными, устаревшими, неточными или обрабатываются незаконно.',
-                    'Оператор принимает организационные и технические меры для защиты персональных данных от неправомерного доступа, уничтожения, изменения, блокирования, копирования и распространения.',
+                    'Обработка персональных данных осуществляется с согласия субъекта персональных данных, а также в иных случаях, предусмотренных законодательством Российской Федерации.',
+                    'Персональные данные пользователя не передаются третьим лицам, за исключением случаев, связанных с исполнением законодательства, оказанием услуг или исполнением обязательств по договору при наличии соответствующих оснований.',
+                    'При обработке персональных данных Оператор обеспечивает конфиденциальность персональных данных.',
                 ],
             },
             {
-                'title': 'Контакты и актуальная версия',
+                'title': 'Хранение, отзыв согласия и актуальная версия',
                 'body': [
+                    'Срок обработки персональных данных определяется достижением целей, для которых они были собраны, если иной срок не предусмотрен договором или законодательством.',
+                    'Пользователь может актуализировать персональные данные или отозвать согласие, направив уведомление на адрес info@arsclinic.ru с соответствующей пометкой.',
                     'Все изменения политики публикуются на сайте. Актуальная версия расположена по адресу https://cliniss.ru/policy.',
                 ],
             },
@@ -1358,27 +1461,70 @@ PAGES = {
         'Privacy Policy',
         'Legal',
         'Privacy Policy',
-        'This page provides an English reference version of the Russian personal data policy.',
+        'This English reference version describes the purposes, principles, conditions, and safeguards for personal data processing on the CLINISS site.',
         [
             {
-                'title': 'Controller and Scope',
+                'title': 'General Provisions',
                 'body': [
-                    'The personal data controller is ARS Clinical Center LLC. Questions about personal data processing can be sent to info@arsclinic.ru.',
-                    'The policy applies to information received through the site, feedback forms, and communication channels.',
+                    'This personal data policy is based on the requirements of Russian Federal Law No. 152-FZ on Personal Data.',
+                    'The personal data controller is ARS Clinical Center LLC. The controller treats respect for individual rights and freedoms in personal data processing as an important condition of its activity.',
+                    'The policy applies to information the controller may receive from visitors of https://cliniss.ru, including feedback form data and technical site usage data.',
+                ],
+            },
+            {
+                'title': 'Key Terms',
+                'body': [
+                    'Personal data means any information directly or indirectly related to an identified or identifiable site user.',
+                    'Processing includes collection, recording, systematization, accumulation, storage, clarification, use, transfer, depersonalization, blocking, deletion, and destruction of personal data.',
+                    'Automated processing means processing with computer technology. Depersonalization means actions after which data cannot be attributed to a specific user without additional information.',
+                ],
+            },
+            {
+                'title': 'Controller Rights and Duties',
+                'body': [
+                    'The controller may receive accurate information and documents containing personal data from the data subject.',
+                    'The controller must organize processing in accordance with Russian law, respond to data subject requests, and provide access to this policy.',
+                    'The controller applies legal, organizational, and technical measures to protect personal data from unlawful or accidental access, destruction, modification, blocking, copying, provision, and distribution.',
+                ],
+            },
+            {
+                'title': 'User Rights',
+                'body': [
+                    'The user may receive information about personal data processing and request clarification, blocking, or deletion of data where data are incomplete, outdated, inaccurate, unlawfully obtained, or no longer necessary for the stated purpose.',
+                    'The user may withdraw consent to personal data processing and request termination of processing. The user may also appeal unlawful actions or inaction to the authorized body or court.',
+                    'The user must provide accurate data and notify the controller about clarification, updates, or changes.',
+                ],
+            },
+            {
+                'title': 'Processing Principles',
+                'body': [
+                    'Personal data are processed lawfully and fairly and only for specific, predetermined, and legitimate purposes.',
+                    'The controller does not process data in ways incompatible with the collection purposes and does not merge databases processed for incompatible purposes.',
+                    'The content and volume of processed personal data correspond to the stated purposes. Accuracy, sufficiency, and relevance are maintained during processing.',
                 ],
             },
             {
                 'title': 'Purposes and Data Categories',
                 'body': [
-                    'Data are processed for feedback, request handling, volunteer enrollment, internal lead accounting, site improvement, and legal compliance.',
-                    'Processed data may include name, phone, email, user comments, form data, browser technical data, IP address, and cookies.',
+                    'Personal data are processed to inform users, handle requests, enroll study candidates, provide feedback, maintain internal request records, improve the site, and comply with Russian law.',
+                    'Processed data may include surname, name, patronymic, phone, email, user comments, form data, browser technical data, IP address, and cookies.',
+                    'Typical processing actions include collection, recording, systematization, accumulation, storage, clarification, use, destruction, and depersonalization.',
                 ],
             },
             {
-                'title': 'User Rights and Security',
+                'title': 'Conditions and Transfer',
                 'body': [
-                    'The user may request clarification, blocking, or deletion of personal data where permitted by law.',
-                    'The controller applies organizational and technical measures to protect personal data from unauthorized access and misuse.',
+                    'Personal data are processed with the data subject consent and in other cases provided by Russian law.',
+                    'User personal data are not transferred to third parties except where required by law, service provision, or contractual obligations with appropriate legal grounds.',
+                    'The controller maintains confidentiality of personal data during processing.',
+                ],
+            },
+            {
+                'title': 'Storage, Withdrawal, and Current Version',
+                'body': [
+                    'The processing period is determined by the purposes for which data were collected unless another period is provided by contract or law.',
+                    'The user may update personal data or withdraw consent by sending a notice to info@arsclinic.ru with the relevant subject note.',
+                    'Changes to the policy are published on the site. The current version is available at https://cliniss.ru/policy-en.',
                 ],
             },
         ],
@@ -1392,34 +1538,63 @@ PAGES = {
         'Соглашение',
         'Правовая информация',
         'Соглашение об обработке персональных данных',
-        'Соглашение является публичной офертой и используется при отправке форм на сайте CLINISS.',
+        'Соглашение является публичной офертой и используется при отправке форм на сайте CLINISS, включая заявки, обратную связь и обращения добровольцев.',
         [
             {
                 'title': 'Термины и согласие',
                 'body': [
-                    'Сайт - совокупность текстов, графических элементов, дизайна, изображений, программного кода и иных материалов, размещенных по адресу https://cliniss.ru.',
-                    'Администрация сайта - ООО «АРС Клинический Центр». Пользователь - лицо, осуществившее доступ к сайту, заполнившее формы обратной связи и принявшее условия соглашения.',
-                    'Оставляя данные на сайте, пользователь подтверждает достоверность данных, ознакомление с соглашением, согласие на обработку персональных данных и использование cookie.',
+                    'Сайт - совокупность текстов, графических элементов, дизайна, изображений, программного кода, фото- и видеоматериалов и иных результатов интеллектуальной деятельности, размещенных по адресу https://cliniss.ru.',
+                    'Администрация сайта - ООО «АРС Клинический Центр». Пользователь - любое лицо, осуществившее доступ к сайту, заполнившее формы обратной связи и принявшее условия настоящего соглашения.',
+                    'Персональные данные - сведения, предоставляемые пользователем при заполнении форм на сайте, включая имя, номер телефона, адрес электронной почты, комментарии и иные данные, необходимые для обработки обращения.',
+                    'Обработка персональных данных включает сбор, запись, систематизацию, накопление, хранение, уточнение, использование, передачу, обезличивание, блокирование, удаление и уничтожение.',
+                ],
+            },
+            {
+                'title': 'Общие положения',
+                'body': [
+                    'Присоединяясь к соглашению и оставляя данные на сайте cliniss.ru, пользователь подтверждает, что предоставляет достоверные данные о себе, ознакомился с соглашением в полном объеме и действует добровольно, по собственной воле и в своих интересах.',
+                    'Пользователь выражает согласие на обработку своих персональных данных, а также соглашается с использованием файлов cookie и аналитических сервисов.',
+                    'Согласие дается в соответствии с Федеральным законом № 152-ФЗ «О персональных данных».',
                 ],
             },
             {
                 'title': 'Цели обработки',
                 'body': [
-                    'Персональные данные используются для предоставления медицинских и консультационных услуг, обработки заявок и обращений, обратной связи, ведения клиентской базы, информирования об услугах и выполнения требований законодательства РФ.',
+                    'Персональные данные используются для обработки заявок и обращений, записи кандидатов на исследования, обратной связи с пользователем, ведения внутренней базы обращений, информирования об услугах и исследованиях, улучшения качества сайта и выполнения требований законодательства РФ.',
+                    'Если пользователь отправляет заявку на сотрудничество, добровольческую анкету, отзыв или вопрос, данные используются для связи с пользователем и подготовки ответа по выбранному сценарию обращения.',
+                    'При наличии согласия пользователь может получать информационные сообщения по телефону, электронной почте, SMS, мессенджерам и иным средствам связи. Пользователь вправе отказаться от таких сообщений.',
                 ],
             },
             {
-                'title': 'Способы обработки и срок действия',
+                'title': 'Способы обработки и передача',
                 'body': [
-                    'Обработка осуществляется с использованием средств автоматизации и без них. Администрация сайта вправе вести электронные базы, реестры и внутренние системы учета.',
-                    'Согласие действует с момента предоставления данных и до достижения целей обработки либо до отзыва пользователем.',
+                    'Обработка персональных данных осуществляется с использованием средств автоматизации и без использования таких средств.',
+                    'Администрация сайта вправе вносить персональные данные в электронные базы, реестры и внутренние системы учета обращений.',
+                    'Допускается передача персональных данных третьим лицам без дополнительного согласия пользователя в случаях, когда это необходимо для оказания услуг, обработки обращения или предусмотрено законодательством РФ.',
                 ],
             },
             {
-                'title': 'Cookie',
+                'title': 'Срок действия и отзыв согласия',
                 'body': [
-                    'Файлы cookie помогают запоминать настройки и улучшать пользовательский опыт. На сайте могут использоваться обязательные, аналитические, функциональные и рекламные cookie при наличии соответствующих сервисов.',
+                    'Согласие на обработку персональных данных действует с момента их предоставления и до достижения целей обработки либо до отзыва пользователем.',
+                    'Пользователь вправе отозвать согласие путем направления письменного обращения Администрации сайта. После получения обращения обработка прекращается в порядке и сроки, предусмотренные законодательством.',
+                    'Администрация сайта вправе вносить изменения в соглашение в одностороннем порядке. Новая редакция вступает в силу с момента размещения на сайте, если иное не предусмотрено.',
+                ],
+            },
+            {
+                'title': 'Cookie и аналитика',
+                'body': [
+                    'Файлы cookie - это небольшие текстовые файлы, сохраняемые на устройстве пользователя при посещении сайта. Они позволяют запоминать настройки и улучшать пользовательский опыт.',
+                    'На сайте могут использоваться обязательные, аналитические, функциональные и рекламные cookie при наличии соответствующих сервисов. Также могут применяться сервисы веб-аналитики, включая Яндекс.Метрику и аналогичные инструменты.',
                     'Пользователь может изменить настройки cookie в браузере. Отключение cookie может повлиять на работу отдельных функций сайта.',
+                ],
+            },
+            {
+                'title': 'Контактная информация',
+                'body': [
+                    'По вопросам обработки персональных данных пользователь может обратиться в ООО «АРС Клинический Центр» по адресу info@arsclinic.ru.',
+                    'К соглашению применяется право Российской Федерации. Все споры подлежат разрешению в соответствии с действующим законодательством РФ.',
+                    'Актуальная версия соглашения доступна по адресу https://cliniss.ru/agreement.',
                 ],
             },
         ],
@@ -1433,32 +1608,63 @@ PAGES = {
         'Agreement',
         'Legal',
         'Personal Data Processing Agreement',
-        'This English reference page describes the consent used when forms are submitted on the CLINISS site.',
+        'This English reference page describes the consent used when forms, feedback, volunteer requests, and other inquiries are submitted on the CLINISS site.',
         [
             {
                 'title': 'Terms and Consent',
                 'body': [
-                    'The site is the set of text, design, images, program code, and other materials located at https://cliniss.ru.',
-                    'The site administration is ARS Clinical Center LLC. A user is a person who accesses the site, completes feedback forms, and accepts the agreement terms.',
-                    'By submitting data, the user confirms data accuracy, acceptance of the agreement, consent to personal data processing, and cookie use.',
+                    'The site is the set of text, design elements, images, program code, photo and video materials, and other intellectual property located at https://cliniss.ru.',
+                    'The site administration is ARS Clinical Center LLC. A user is any person who accesses the site, completes feedback forms, and accepts this agreement.',
+                    'Personal data means information provided by the user in site forms, including name, phone number, email address, comments, and other data needed to handle the request.',
+                    'Personal data processing includes collection, recording, systematization, accumulation, storage, clarification, use, transfer, depersonalization, blocking, deletion, and destruction.',
+                ],
+            },
+            {
+                'title': 'General Provisions',
+                'body': [
+                    'By joining the agreement and submitting data on cliniss.ru, the user confirms that the data are accurate, that the user has read the agreement in full, and that the user acts voluntarily and in their own interest.',
+                    'The user consents to personal data processing and agrees to the use of cookies and analytics services.',
+                    'Consent is given in accordance with Russian Federal Law No. 152-FZ on Personal Data.',
                 ],
             },
             {
                 'title': 'Processing Purposes',
                 'body': [
-                    'Personal data are used for medical and consultation services, request handling, feedback, internal records, information about services, and compliance with Russian law.',
+                    'Personal data are used to handle requests and inquiries, enroll study candidates, provide feedback, maintain internal request records, inform users about services and studies, improve site quality, and comply with Russian law.',
+                    'If the user submits a cooperation request, volunteer form, review, or question, the data are used to contact the user and prepare a response according to the selected request scenario.',
+                    'With consent, the user may receive information messages by phone, email, SMS, messengers, and other communication channels. The user may opt out of such messages.',
                 ],
             },
             {
-                'title': 'Processing and Duration',
+                'title': 'Processing Methods and Transfer',
                 'body': [
-                    'Processing may be automated or non-automated. Consent applies from the moment data are submitted until processing purposes are achieved or consent is withdrawn.',
+                    'Processing may be automated or non-automated.',
+                    'The site administration may enter personal data into electronic databases, registers, and internal request accounting systems.',
+                    'Personal data may be transferred to third parties without additional consent where this is necessary to provide services, handle a request, or comply with Russian law.',
                 ],
             },
             {
-                'title': 'Cookies',
+                'title': 'Duration and Withdrawal',
                 'body': [
-                    'Cookies help remember settings and improve user experience. Browser settings can be used to limit cookies, but this may affect some site functions.',
+                    'Consent applies from the moment data are submitted until processing purposes are achieved or consent is withdrawn by the user.',
+                    'The user may withdraw consent by sending a written request to the site administration. Processing is then stopped according to the procedure and timing required by law.',
+                    'The site administration may update this agreement unilaterally. The new version takes effect when published on the site unless otherwise stated.',
+                ],
+            },
+            {
+                'title': 'Cookies and Analytics',
+                'body': [
+                    'Cookies are small text files stored on the user device when visiting the site. They help remember settings and improve user experience.',
+                    'The site may use required, analytical, functional, and advertising cookies where relevant services are present. Web analytics services, including Yandex Metrica and similar tools, may also be used.',
+                    'Browser settings can be used to limit cookies, but this may affect some site functions.',
+                ],
+            },
+            {
+                'title': 'Contact Information',
+                'body': [
+                    'Questions about personal data processing can be sent to ARS Clinical Center LLC at info@arsclinic.ru.',
+                    'This agreement is governed by the law of the Russian Federation. Disputes are resolved under applicable Russian law.',
+                    'The current version is available at https://cliniss.ru/agreement-en.',
                 ],
             },
         ],
@@ -1466,6 +1672,173 @@ PAGES = {
         hero_image='site/img/graphics/cliniss-wave-brand.jpg',
     ),
 }
+
+TILDA_PAGE_IMAGES = {
+    '': [
+        'tild6464-3036-4664-a639-316435636665__photo.svg',
+        'tild3535-6332-4563-b965-633434396262__5199648934123928083.jpg',
+        'tild6663-3734-4361-a366-626531396138__391052fb-bb3f-47df-b.png',
+        'tild6132-3962-4566-a462-653130306265__photo.png',
+        'tild3536-3038-4663-a131-653233633332__photo.png',
+        'tild6465-3130-4765-b631-663861396362__12.png',
+        'tild3462-6538-4339-a562-366233623635__photo.png',
+        'tild3963-3561-4437-a664-396564393863__photo.png',
+        'tild3663-3934-4832-b462-336432643537___.png',
+        'tild3461-6263-4261-b561-303739383461__1761219557.png',
+        'tild3337-6330-4763-b731-613135643030__noroot.png',
+        'tild3637-3631-4331-a132-613466393231___dsc3098_dxo.jpg',
+        'tild6465-3130-4538-b865-633833386533__1761218282.png',
+        'tild3533-3365-4234-a533-626466623135__1761219237.png',
+        'tild6531-6536-4164-b834-336532366564__whatsapp_image_2025-.jpeg',
+        'tild6335-3765-4264-a634-373432363935__1761219557.png',
+        'tild6334-3233-4436-a262-613464643433__noroot.png',
+        'tild3130-6563-4566-b437-323833303731___dsc3098_dxo.jpg',
+        'tild3233-3339-4664-b963-633731643561__1761218282.png',
+        'tild3339-3333-4563-b131-323262336262__1761219237.png',
+        'tild3939-3130-4463-b831-303235663834__whatsapp_image_2025-.jpeg',
+        'tild6564-3735-4434-a235-363032333563__photo.png',
+        'tild6465-3561-4739-a566-306661643863____01.png',
+        'tild3430-3366-4265-a137-383565393334____01.png',
+        'tild3738-3364-4330-b934-653363363536____01.png',
+        'tild6364-6366-4634-a563-613733623363____01.png',
+        'tild3032-3435-4537-b931-646236643631____01.png',
+        'tild3731-6332-4965-b636-343966373663__photo.png',
+        'tild6562-6635-4432-a662-653762646133__photo.svg',
+    ],
+    'center': [
+        'tild3638-3835-4337-a235-316331663938__22222.jpg',
+        'tild3039-3739-4238-a438-363833383939__948172ac-2e53-49b1-b.png',
+        'tild6365-3363-4336-a166-343633366164__3697448c-3669-4589-b.png',
+        'tild3065-3931-4163-b933-323664303339__edff5fa7-b83d-4ba7-a.png',
+        'tild3461-6263-4261-b561-303739383461__1761219557.png',
+        'tild3337-6330-4763-b731-613135643030__noroot.png',
+        'tild3637-3631-4331-a132-613466393231___dsc3098_dxo.jpg',
+        'tild6465-3130-4538-b865-633833386533__1761218282.png',
+        'tild3533-3365-4234-a533-626466623135__1761219237.png',
+        'tild6531-6536-4164-b834-336532366564__whatsapp_image_2025-.jpeg',
+    ],
+    'license': [
+        'tild3566-6263-4266-b164-363262666431__df4cf50f-7029-4998-a.png',
+        'tild3465-6332-4764-b032-303239396663__9d2b3122-2600-403a-b.png',
+    ],
+    'employees': [
+        'tild3466-6138-4739-b831-356134343835__no.png',
+        'tild3332-3864-4866-a431-663534376631__no.png',
+        'tild3937-6462-4861-b264-393837623363__no.png',
+        'tild6465-3561-4739-a566-306661643863____01.png',
+        'tild3430-3366-4265-a137-383565393334____01.png',
+        'tild3137-3134-4864-b930-323862326564__nopng.webp',
+        'tild3738-3364-4330-b934-653363363536____01.png',
+        'tild6364-6366-4634-a563-613733623363____01.png',
+        'tild3032-3435-4537-b931-646236643631____01.png',
+    ],
+    'missions': [
+        'tild6630-6338-4663-b431-316133376262__363a682f-3ed9-4b6d-9.png',
+        'tild3333-3437-4263-b738-303362373030__d0ef74d4-894b-43fe-9.png',
+        'tild3230-3866-4939-b135-393338396133__cf1ffb3e-7e91-458a-a.png',
+        'tild3333-3038-4235-b230-326130336637__27d8e191-5dad-41d6-8.png',
+        'tild6433-6531-4664-b431-643439636466__edf064f0-742b-47f9-b.png',
+    ],
+    'system': [
+        'tild6464-3036-4664-a639-316435636665__photo.svg',
+    ],
+    'areaswork': [
+        'tild3266-3865-4564-b030-383934323331__fc724a3a-f525-455c-9.png',
+        'tild6233-6265-4664-b466-333766306662__dd0d11b5-9599-4b3e-b.png',
+        'tild3761-6361-4138-b739-356436386332__3d812050-a3a8-4878-8.png',
+        'tild3038-3631-4839-b466-643839353237__8c07819d-3875-4bdb-8.png',
+        'tild6362-6365-4139-a333-383335313761__f5fd7915-2e4d-40fc-8.png',
+        'tild6261-3239-4137-b436-336338623036__af3be825-46ef-4c5b-b.png',
+        'tild6535-6133-4638-a337-316436643636__b562e266-71ad-457a-b.png',
+        'tild6466-6339-4633-a661-383465303263__14668832-39d0-4435-b.png',
+        'tild3261-3638-4164-a465-623662333931__931bb182-381b-4af3-a.png',
+        'tild3031-6533-4430-b433-616266613531__frame_100.png',
+        'tild3465-3230-4132-b233-393137313861__d921ae0b-1f7d-4d9e-8.png',
+        'tild6264-6564-4334-b938-333731343631__photo.svg',
+    ],
+    'volunteers': [
+        'tild6461-3938-4231-b839-633338303635__group_603.png',
+    ],
+    'contacts': [
+        'tild3731-6332-4965-b636-343966373663__photo.png',
+        'tild6365-6530-4066-b939-386434366535__photo.svg',
+    ],
+    'docs': [
+        'tild3364-3365-4762-b561-613039393038__2026-02-04_14-37-11.png',
+        'tild3731-6332-4965-b636-343966373663__photo.png',
+        'tild6365-6530-4066-b939-386434366535__photo.svg',
+    ],
+    'issledovaniya-bioekvivalentnosti': [
+        'tild3364-6638-4234-b464-663739363262__view-laboratory-test.png',
+        'tild6365-3634-4665-a232-336332666338__2026-04-15_11-45-15.png',
+        'tild3666-6565-4034-b537-396337316236__9a35c1aa-05cd-4788-9.png',
+    ],
+    'en': [
+        'tild3535-6332-4563-b965-633434396262__5199648934123928083.jpg',
+        'tild6663-3734-4361-a366-626531396138__391052fb-bb3f-47df-b.png',
+        'tild6132-3962-4566-a462-653130306265__photo.png',
+        'tild3536-3038-4663-a131-653233633332__photo.png',
+        'tild6465-3130-4765-b631-663861396362__12.png',
+        'tild3462-6538-4339-a562-366233623635__photo.png',
+        'tild3963-3561-4437-a664-396564393863__photo.png',
+        'tild3663-3934-4832-b462-336432643537___.png',
+        'tild3461-6263-4261-b561-303739383461__1761219557.png',
+        'tild3337-6330-4763-b731-613135643030__noroot.png',
+        'tild3637-3631-4331-a132-613466393231___dsc3098_dxo.jpg',
+        'tild6465-3130-4538-b865-633833386533__1761218282.png',
+        'tild3533-3365-4234-a533-626466623135__1761219237.png',
+        'tild6531-6536-4164-b834-336532366564__whatsapp_image_2025-.jpeg',
+        'tild6465-3561-4739-a566-306661643863____01.png',
+        'tild3430-3366-4265-a137-383565393334____01.png',
+        'tild3738-3364-4330-b934-653363363536____01.png',
+        'tild3732-3832-4732-b865-313965393664____01.png',
+        'tild6364-6366-4634-a563-613733623363____01.png',
+        'tild3032-3435-4537-b931-646236643631____01.png',
+        'tild6562-6635-4432-a662-653762646133__photo.svg',
+        'tild3731-6332-4965-b636-343966373663__photo.png',
+    ],
+    'center-en': [
+        'tild6632-3139-4437-a436-663736306634__wtynh.png',
+        'tild3039-3739-4238-a438-363833383939__948172ac-2e53-49b1-b.png',
+        'tild6365-3363-4336-a166-343633366164__3697448c-3669-4589-b.png',
+        'tild3065-3931-4163-b933-323664303339__edff5fa7-b83d-4ba7-a.png',
+        'tild3461-6263-4261-b561-303739383461__1761219557.png',
+        'tild3337-6330-4763-b731-613135643030__noroot.png',
+        'tild3637-3631-4331-a132-613466393231___dsc3098_dxo.jpg',
+        'tild6465-3130-4538-b865-633833386533__1761218282.png',
+        'tild3533-3365-4234-a533-626466623135__1761219237.png',
+        'tild6531-6536-4164-b834-336532366564__whatsapp_image_2025-.jpeg',
+    ],
+    'license-en': [
+        'tild3566-6263-4266-b164-363262666431__df4cf50f-7029-4998-a.png',
+        'tild3465-6332-4764-b032-303239396663__9d2b3122-2600-403a-b.png',
+    ],
+    'employees-en': [
+        'tild6465-3561-4739-a566-306661643863____01.png',
+        'tild3430-3366-4265-a137-383565393334____01.png',
+        'tild3732-3832-4732-b865-313965393664____01.png',
+        'tild3738-3364-4330-b934-653363363536____01.png',
+        'tild6364-6366-4634-a563-613733623363____01.png',
+        'tild3032-3435-4537-b931-646236643631____01.png',
+    ],
+    'missions-en': [
+        'tild6630-6338-4663-b431-316133376262__363a682f-3ed9-4b6d-9.png',
+        'tild3333-3437-4263-b738-303362373030__d0ef74d4-894b-43fe-9.png',
+        'tild3230-3866-4939-b135-393338396133__cf1ffb3e-7e91-458a-a.png',
+        'tild3333-3038-4235-b230-326130336637__27d8e191-5dad-41d6-8.png',
+        'tild6433-6531-4664-b431-643439636466__edf064f0-742b-47f9-b.png',
+    ],
+    'contacts-en': [
+        'tild6365-6530-4066-b939-386434366535__photo.svg',
+        'tild3731-6332-4965-b636-343966373663__photo.png',
+    ],
+}
+
+for slug, filenames in TILDA_PAGE_IMAGES.items():
+    if filenames and slug in PAGES:
+        PAGES[slug]['sections'].append(
+            source_image_section(PAGES[slug]['language'], filenames)
+        )
 
 PAGE_ORDER = list(PAGES.keys())
 

@@ -5,6 +5,8 @@ db.sqlite3
 staticfiles/
 media/
 tmp-screens/
+build/
+dist/
 .env
 .pytest_cache/
 .coverage

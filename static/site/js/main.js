@@ -2,12 +2,60 @@
     var menuButton = document.querySelector('.menu-toggle');
     var nav = document.querySelector('.site-nav');
     var actions = document.querySelector('.header-actions');
+    var navGroups = Array.prototype.slice.call(document.querySelectorAll('.nav-group'));
+    var mobileMenuQuery = window.matchMedia('(max-width: 1100px)');
+
+    function closeNavGroups() {
+        navGroups.forEach(function (group) {
+            var button = group.querySelector('.nav-group__button');
+            group.classList.remove('is-expanded');
+            if (button) {
+                button.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+
+    navGroups.forEach(function (group) {
+        var button = group.querySelector('.nav-group__button');
+        if (!button) {
+            return;
+        }
+
+        button.addEventListener('click', function () {
+            if (!mobileMenuQuery.matches) {
+                return;
+            }
+
+            var isExpanded = !group.classList.contains('is-expanded');
+            closeNavGroups();
+            group.classList.toggle('is-expanded', isExpanded);
+            button.setAttribute('aria-expanded', String(isExpanded));
+        });
+    });
 
     if (menuButton && nav && actions) {
         menuButton.addEventListener('click', function () {
             var isOpen = nav.classList.toggle('is-open');
             actions.classList.toggle('is-open', isOpen);
+            document.body.classList.toggle('menu-is-open', isOpen);
             menuButton.setAttribute('aria-expanded', String(isOpen));
+            if (!isOpen) {
+                closeNavGroups();
+            }
+        });
+    }
+
+    if (mobileMenuQuery.addEventListener) {
+        mobileMenuQuery.addEventListener('change', function (event) {
+            if (!event.matches) {
+                closeNavGroups();
+                if (nav && actions && menuButton) {
+                    nav.classList.remove('is-open');
+                    actions.classList.remove('is-open');
+                    document.body.classList.remove('menu-is-open');
+                    menuButton.setAttribute('aria-expanded', 'false');
+                }
+            }
         });
     }
 

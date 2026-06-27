@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.staticfiles import finders
 
-from .data import PAGE_ORDER, PAGES
+from .data import PAGE_ORDER, PAGES, TILDA_PAGE_IMAGES
 
 
 class PageRouteTests(TestCase):
@@ -88,3 +88,15 @@ class PageRouteTests(TestCase):
         for path in sorted(paths):
             with self.subTest(path=path):
                 self.assertIsNotNone(finders.find(path), path)
+
+    def test_tilda_source_images_are_rendered_on_matching_pages(self):
+        for slug, filenames in TILDA_PAGE_IMAGES.items():
+            path = '/' if slug == '' else f'/{slug}'
+            response = self.client.get(path)
+            self.assertEqual(response.status_code, 200)
+            for filename in filenames:
+                with self.subTest(path=path, filename=filename):
+                    self.assertContains(
+                        response,
+                        f'/static/site/img/tilda/{filename}',
+                    )
