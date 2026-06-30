@@ -1,8 +1,8 @@
 SITE = {
     'name': 'CLINISS',
     'legal_name': 'ООО «АРС Клинический Центр»',
-    'phone': '+7 (4822) 78-17-67',
-    'phone_href': 'tel:+74822781767',
+    'phone': '+7 (909) 157-86-18',
+    'phone_href': 'tel:+79091578618',
     'mobile_phone': '+7 (909) 157-86-18',
     'mobile_phone_href': 'tel:+79091578618',
     'email': 'info@arsclinic.ru',
@@ -12,7 +12,7 @@ SITE = {
     'license': 'Л041-01186-69/01327284 от 31.07.2024',
     'telegram_url': 'https://t.me/cliniss_tver',
     'vk_url': 'https://vk.com/cliniss_tver',
-    'whatsapp_url': 'https://wa.me/74822781767',
+    'whatsapp_url': 'https://wa.me/79091578618',
 }
 
 NAVIGATION = {

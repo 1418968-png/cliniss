@@ -37,6 +37,12 @@
                     {% endfor %}
                 </div>
 
+                {% if section.cta_label %}
+                    <div class="section-actions">
+                        <a class="button button--primary" href="{{ section.cta_url|default:'#lead-form' }}">{{ section.cta_label }}</a>
+                    </div>
+                {% endif %}
+
                 {% if section.facts %}
                     <div class="fact-grid">
                         {% for fact in section.facts %}

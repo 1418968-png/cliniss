@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.staticfiles import finders
 
-from .data import PAGE_ORDER, PAGES, TILDA_PAGE_IMAGES
+from .data import PAGE_ORDER, PAGES
 
 
 class PageRouteTests(TestCase):
@@ -43,6 +43,8 @@ class PageRouteTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'CLINISS на карте')
         self.assertContains(response, '10:00-13:00')
+        self.assertContains(response, '+7 (909) 157-86-18')
+        self.assertNotContains(response, '+7 (4822) 78-17-67')
         self.assertContains(response, 'map-widget')
 
     def test_docs_include_downloadable_policy_and_consent_links(self):
@@ -70,6 +72,27 @@ class PageRouteTests(TestCase):
                     html=True,
                 )
 
+    def test_homepage_matches_review_notes(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'CLINISS - это современный центр клинических исследований')
+        self.assertContains(response, 'Наша работа в цифрах')
+        self.assertContains(response, '15+')
+        self.assertContains(response, 'Слово специалиста')
+        self.assertContains(response, 'принцип GCP')
+        self.assertContains(response, 'Отзывы на Яндекс Картах')
+        self.assertContains(response, 'https://yandex.ru/maps/org/cliniss/80092053546/reviews/')
+
+    def test_source_tilda_galleries_are_not_rendered(self):
+        for slug in PAGE_ORDER:
+            path = '/' if slug == '' else f'/{slug}'
+            with self.subTest(path=path):
+                response = self.client.get(path)
+                self.assertEqual(response.status_code, 200)
+                self.assertNotContains(response, 'Изображения страницы')
+                self.assertNotContains(response, 'Page Images')
+                self.assertNotContains(response, '/static/site/img/tilda/')
+
     def test_page_image_assets_exist(self):
         paths = set()
         for page in PAGES.values():
@@ -88,15 +111,3 @@ class PageRouteTests(TestCase):
         for path in sorted(paths):
             with self.subTest(path=path):
                 self.assertIsNotNone(finders.find(path), path)
-
-    def test_tilda_source_images_are_rendered_on_matching_pages(self):
-        for slug, filenames in TILDA_PAGE_IMAGES.items():
-            path = '/' if slug == '' else f'/{slug}'
-            response = self.client.get(path)
-            self.assertEqual(response.status_code, 200)
-            for filename in filenames:
-                with self.subTest(path=path, filename=filename):
-                    self.assertContains(
-                        response,
-                        f'/static/site/img/tilda/{filename}',
-                    )

@@ -109,33 +109,6 @@ def media(src, alt, caption=''):
     return {'src': src, 'alt': alt, 'caption': caption}
 
 
-def tilda_media(filename, language, index):
-    alt = (
-        f'Изображение страницы {index}'
-        if language == 'ru'
-        else f'Page image {index}'
-    )
-    return media(f'site/img/tilda/{filename}', alt)
-
-
-def source_image_section(language, filenames):
-    return {
-        'title': 'Изображения страницы' if language == 'ru' else 'Page Images',
-        'body': [
-            (
-                'Фотографии и графика исходного раздела.'
-                if language == 'ru'
-                else 'Photos and graphics from the source page.'
-            ),
-        ],
-        'images': [
-            tilda_media(filename, language, index)
-            for index, filename in enumerate(filenames, start=1)
-        ],
-        'gallery_style': 'source',
-    }
-
-
 def fact(value, label):
     return {'value': value, 'label': label}
 
@@ -357,28 +330,30 @@ DOC_LINKS_EN = [
 ]
 
 CONTACT_LINKS_RU = [
-    link('Телефон центра', 'tel:+74822781767', '+7 (4822) 78-17-67', external=False),
-    link('Мобильный телефон', 'tel:+79091578618', '+7 (909) 157-86-18', external=False),
+    link('Телефон центра', 'tel:+79091578618', '+7 (909) 157-86-18', external=False),
     link('Email', 'mailto:info@arsclinic.ru', 'info@arsclinic.ru', external=False),
     link('Telegram', 'https://t.me/cliniss_tver', 'Канал связи с центром'),
-    link('WhatsApp', 'https://wa.me/74822781767', 'Быстрое сообщение'),
+    link('WhatsApp', 'https://wa.me/79091578618', 'Быстрое сообщение'),
     link('VK', 'https://vk.com/cliniss_tver', 'Сообщество CLINISS'),
 ]
 
 CONTACT_LINKS_EN = [
-    link('Center phone', 'tel:+74822781767', '+7 (4822) 78-17-67', external=False),
-    link('Mobile phone', 'tel:+79091578618', '+7 (909) 157-86-18', external=False),
+    link('Center phone', 'tel:+79091578618', '+7 (909) 157-86-18', external=False),
     link('Email', 'mailto:info@arsclinic.ru', 'info@arsclinic.ru', external=False),
     link('Telegram', 'https://t.me/cliniss_tver', 'Contact channel'),
-    link('WhatsApp', 'https://wa.me/74822781767', 'Quick message'),
+    link('WhatsApp', 'https://wa.me/79091578618', 'Quick message'),
     link('VK', 'https://vk.com/cliniss_tver', 'CLINISS community'),
 ]
+
+YANDEX_MAPS_ORG_URL = 'https://yandex.ru/maps/org/cliniss/80092053546/'
+YANDEX_MAPS_REVIEWS_URL = 'https://yandex.ru/maps/org/cliniss/80092053546/reviews/'
+YANDEX_MAPS_WIDGET_URL = 'https://yandex.ru/map-widget/v1/?mode=search&oid=80092053546&ol=biz&z=16'
 
 CONTACT_MAP_RU = map_block(
     'CLINISS на карте',
     '170100, г. Тверь, Вагжановский переулок, 9, 2 этаж',
-    'https://yandex.ru/maps/?text=170100%2C%20%D0%A2%D0%B2%D0%B5%D1%80%D1%8C%2C%20%D0%92%D0%B0%D0%B3%D0%B6%D0%B0%D0%BD%D0%BE%D0%B2%D1%81%D0%BA%D0%B8%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D1%83%D0%BB%D0%BE%D0%BA%2C%209',
-    'https://yandex.ru/map-widget/v1/?text=170100%2C%20%D0%A2%D0%B2%D0%B5%D1%80%D1%8C%2C%20%D0%92%D0%B0%D0%B3%D0%B6%D0%B0%D0%BD%D0%BE%D0%B2%D1%81%D0%BA%D0%B8%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D1%83%D0%BB%D0%BE%D0%BA%2C%209&z=16',
+    YANDEX_MAPS_ORG_URL,
+    YANDEX_MAPS_WIDGET_URL,
     'Открыть в Яндекс Картах',
     'Вход в центр расположен на 2 этаже. Перед визитом на скрининг дождитесь подтверждения времени от менеджера.',
 )
@@ -386,8 +361,8 @@ CONTACT_MAP_RU = map_block(
 CONTACT_MAP_EN = map_block(
     'CLINISS on the Map',
     '2nd floor, 9 Vagzhanovsky lane, Tver, Russian Federation, 170100',
-    'https://yandex.ru/maps/?text=170100%2C%20Tver%2C%209%20Vagzhanovsky%20lane',
-    'https://yandex.ru/map-widget/v1/?text=170100%2C%20Tver%2C%209%20Vagzhanovsky%20lane&z=16',
+    YANDEX_MAPS_ORG_URL,
+    YANDEX_MAPS_WIDGET_URL,
     'Open in Yandex Maps',
     'The center is located on the 2nd floor. Please wait for the manager to confirm your screening time before visiting.',
 )
@@ -406,51 +381,70 @@ PAGES = {
             {
                 'title': 'О центре',
                 'body': [
-                    'CLINISS оснащен современным оборудованием и ориентирован на проведение исследований биоэквивалентности, ранних фаз, эффективности, безопасности и терапевтической эквивалентности.',
-                    'В центре предусмотрены стационарное и амбулаторное отделения, процедурные кабинеты, преаналитическая лаборатория, контролируемый доступ и условия для комфортного пребывания добровольцев.',
+                    'CLINISS - это современный центр клинических исследований, оборудованный по последнему слову техники.',
+                    'Мы специализируемся на исследованиях биоэквивалентности и ранних фаз, а также предлагаем широкие возможности для изучения эффективности, безопасности и терапевтической эквивалентности препаратов.',
                 ],
-                'facts': CENTER_FACTS_RU,
-                'image': media('site/img/photos/lab-tubes.jpg', 'Пробирки в лаборатории CLINISS'),
+                'image': media('site/img/photos/center-equipment.png', 'Оборудование CLINISS для хранения и контроля образцов'),
             },
             {
-                'title': 'Клинические исследования',
+                'title': 'Наша работа в цифрах',
                 'body': [
-                    'Исследования проводятся с соблюдением нормативных требований в специально оборудованном современном отделении.',
+                    'Мы оставили на главной только те показатели, которые помогают быстро понять масштаб центра и его исследовательскую инфраструктуру.',
                 ],
-                'bullets': ['Биоэквивалентность', 'Терапевтическая эквивалентность', 'Эффективность и безопасность', 'Ранние фазы'],
-                'image': media('site/img/photos/center-equipment.png', 'Оборудование CLINISS для хранения и контроля образцов'),
+                'facts': [
+                    fact('54', 'койко-места в палатах для добровольцев'),
+                    fact('50+', 'завершенных исследований'),
+                    fact('600+', 'добровольцев в базе центра'),
+                    fact('15+', 'партнеров и фармацевтических компаний'),
+                ],
             },
             {
                 'title': 'Фотогалерея',
                 'body': [
-                    'Визуальный ряд перенесен из Tilda-экспорта: реальные помещения центра, зона обследований и палаты для добровольцев.',
+                    'Реальные рабочие зоны центра без случайных декоративных изображений: оборудование, амбулаторное обследование и палата для добровольцев.',
                 ],
                 'images': [
+                    media('site/img/photos/center-equipment.png', 'Лабораторное оборудование центра'),
                     media('site/img/photos/outpatient-checkup.jpeg', 'Амбулаторный прием и обследование добровольца'),
                     media('site/img/photos/patient-room.png', 'Палата для добровольцев CLINISS'),
-                    media('site/img/photos/center-equipment.png', 'Лабораторное оборудование центра'),
                 ],
             },
             {
-                'title': 'Для добровольцев',
+                'title': 'Слово специалиста',
                 'body': [
-                    'Центр приглашает добровольцев принять участие в клинических исследованиях. Участники получают медицинское наблюдение, комфортные условия пребывания и денежную компенсацию, если это предусмотрено протоколом.',
+                    'Основа нашей работы - принцип GCP: благополучие добровольца превыше всего.',
+                    'От начала и до конца исследования мы сопровождаем вас, создавая атмосферу комфорта и полного понимания. Прозрачность условий, внимательное, индивидуальное отношение к каждому добровольцу, ваши комфорт и безопасность - наши приоритеты.',
                 ],
                 'image': media('site/img/photos/doctor-documents.jpeg', 'Врач CLINISS работает с документами исследования'),
                 'image_position': 'left',
             },
             {
-                'title': 'Наша команда',
+                'title': 'Готовы внести вклад в будущее медицины?',
                 'body': [
-                    'В проекте участвуют специалисты по клиническим исследованиям, качеству, медицинскому сопровождению и развитию бизнеса.',
+                    'Анкета добровольца открывается отдельной страницей: там собраны условия участия, FAQ и форма заявки.',
                 ],
-                'cards': TEAM_RU[:6],
-                'card_style': 'people',
+                'cta_label': 'Заполнить анкету добровольца',
+                'cta_url': '/volunteers',
+            },
+            {
+                'title': 'Отзывы на Яндекс Картах',
+                'body': [
+                    'Актуальную обратную связь удобнее смотреть в карточке организации: там обновляются рейтинг, оценки и новые отзывы.',
+                    'По данным Яндекс Карт у CLINISS отмечают внимательное отношение персонала, чистоту помещений и комфортные условия участия в исследованиях.',
+                ],
+                'facts': [
+                    fact('4,8', 'рейтинг организации на Яндекс Картах'),
+                    fact('24', 'оценки в карточке организации'),
+                    fact('17', 'отзывов доступно для чтения'),
+                ],
+                'links': [
+                    link('Смотреть отзывы CLINISS', YANDEX_MAPS_REVIEWS_URL, 'Яндекс Карты'),
+                ],
             },
         ],
-        cta_label='Запросить коммерческое предложение',
+        cta_label='Связаться с центром',
         hero_image='site/img/hero-lab.jpg',
-        stats=[fact('50+', 'завершенных исследований'), fact('600+', 'добровольцев'), fact('54', 'койко-места')],
+        stats=[fact('50+', 'завершенных исследований'), fact('600+', 'добровольцев'), fact('15+', 'партнеров')],
         form_title='Обсудить исследование',
         form_lead='Оставьте контактные данные, если хотите запросить коммерческое предложение, звонок или консультацию по исследованию.',
         default_lead_type='proposal',
@@ -468,51 +462,70 @@ PAGES = {
             {
                 'title': 'About the Center',
                 'body': [
-                    'CLINISS is equipped with modern technology and focuses on bioequivalence, early-phase, efficacy, safety, and therapeutic equivalence studies.',
-                    'The center includes inpatient and outpatient departments, procedure rooms, a pre-analytical laboratory, controlled access, and comfortable conditions for volunteers.',
+                    'CLINISS is a modern clinical research center equipped with advanced technology.',
+                    'We specialize in bioequivalence and early-phase studies and provide broad capabilities for studying drug efficacy, safety, and therapeutic equivalence.',
                 ],
-                'facts': CENTER_FACTS_EN,
-                'image': media('site/img/photos/lab-tubes.jpg', 'Laboratory samples at CLINISS'),
+                'image': media('site/img/photos/center-equipment.png', 'CLINISS equipment for sample storage and control'),
             },
             {
-                'title': 'Clinical Trials',
+                'title': 'Our Work in Numbers',
                 'body': [
-                    'Clinical trials are conducted in compliance with regulatory requirements in a specially equipped modern unit.',
+                    'The home page keeps the core indicators that explain the center scale and research infrastructure at a glance.',
                 ],
-                'bullets': ['Bioequivalence', 'Therapeutic equivalence', 'Efficacy and safety', 'Early phases'],
-                'image': media('site/img/photos/center-equipment.png', 'CLINISS equipment for sample storage and control'),
+                'facts': [
+                    fact('54', 'volunteer beds in the inpatient department'),
+                    fact('50+', 'completed studies'),
+                    fact('600+', 'volunteers in the center database'),
+                    fact('15+', 'partners and pharmaceutical companies'),
+                ],
             },
             {
                 'title': 'Photo Gallery',
                 'body': [
-                    'The visual material has been migrated from the Tilda export: real center rooms, screening areas, and volunteer accommodation.',
+                    'Real working areas of the center without random decorative images: equipment, outpatient screening, and a volunteer room.',
                 ],
                 'images': [
+                    media('site/img/photos/center-equipment.png', 'Center laboratory equipment'),
                     media('site/img/photos/outpatient-checkup.jpeg', 'Outpatient checkup and volunteer screening'),
                     media('site/img/photos/patient-room.png', 'Volunteer room at CLINISS'),
-                    media('site/img/photos/center-equipment.png', 'Center laboratory equipment'),
                 ],
             },
             {
-                'title': 'For Volunteers',
+                'title': 'Specialist Note',
                 'body': [
-                    'The center invites volunteers to participate in clinical studies. Participants receive medical supervision, comfortable conditions, and compensation when provided by the protocol.',
+                    'The foundation of our work is the GCP principle: volunteer well-being comes first.',
+                    'From the beginning to the end of a study, we guide each participant with comfort, clarity, transparent conditions, and attentive individual support.',
                 ],
                 'image': media('site/img/photos/doctor-documents.jpeg', 'CLINISS doctor working with study documents'),
                 'image_position': 'left',
             },
             {
-                'title': 'Our Team',
+                'title': 'Ready to Contribute to the Future of Medicine?',
                 'body': [
-                    'The team includes clinical research, quality, medical support, and business development specialists.',
+                    'The volunteer questionnaire is available on a dedicated page with participation conditions, FAQ, and the request form.',
                 ],
-                'cards': TEAM_EN[:6],
-                'card_style': 'people',
+                'cta_label': 'Fill Out the Volunteer Form',
+                'cta_url': '/volunteers-en',
+            },
+            {
+                'title': 'Yandex Maps Reviews',
+                'body': [
+                    'The current feedback is best viewed in the organization profile where the rating, scores, and new reviews are updated.',
+                    'According to Yandex Maps, visitors mention attentive staff, clean rooms, and comfortable study participation conditions.',
+                ],
+                'facts': [
+                    fact('4.8', 'organization rating on Yandex Maps'),
+                    fact('24', 'scores in the organization profile'),
+                    fact('17', 'reviews available to read'),
+                ],
+                'links': [
+                    link('View CLINISS reviews', YANDEX_MAPS_REVIEWS_URL, 'Yandex Maps'),
+                ],
             },
         ],
-        cta_label='Request a Proposal',
+        cta_label='Contact the Center',
         hero_image='site/img/hero-lab.jpg',
-        stats=[fact('50+', 'completed studies'), fact('600+', 'volunteers'), fact('54', 'beds')],
+        stats=[fact('50+', 'completed studies'), fact('600+', 'volunteers'), fact('15+', 'partners')],
         form_title='Discuss a Study',
         form_lead='Leave your contact details to request a proposal, callback, or study consultation.',
         default_lead_type='proposal',
@@ -1092,7 +1105,7 @@ PAGES = {
         'Контакты',
         'Контакты',
         'Контакты',
-        'Вагжановский переулок, 9, 2 этаж, Тверь. Телефон: +7 (4822) 78-17-67.',
+        'Вагжановский переулок, 9, 2 этаж, Тверь. Телефон: +7 (909) 157-86-18.',
         [
             {
                 'title': 'Быстрые контакты',
@@ -1132,7 +1145,7 @@ PAGES = {
         'Contacts',
         'Contacts',
         'Contacts',
-        '2nd floor, 9 Vagzhanovsky lane, Tver, Russian Federation. Phone: +7 (4822) 78-17-67.',
+        '2nd floor, 9 Vagzhanovsky lane, Tver, Russian Federation. Phone: +7 (909) 157-86-18.',
         [
             {
                 'title': 'Quick Contacts',
@@ -1672,173 +1685,6 @@ PAGES = {
         hero_image='site/img/graphics/cliniss-wave-brand.jpg',
     ),
 }
-
-TILDA_PAGE_IMAGES = {
-    '': [
-        'tild6464-3036-4664-a639-316435636665__photo.svg',
-        'tild3535-6332-4563-b965-633434396262__5199648934123928083.jpg',
-        'tild6663-3734-4361-a366-626531396138__391052fb-bb3f-47df-b.png',
-        'tild6132-3962-4566-a462-653130306265__photo.png',
-        'tild3536-3038-4663-a131-653233633332__photo.png',
-        'tild6465-3130-4765-b631-663861396362__12.png',
-        'tild3462-6538-4339-a562-366233623635__photo.png',
-        'tild3963-3561-4437-a664-396564393863__photo.png',
-        'tild3663-3934-4832-b462-336432643537___.png',
-        'tild3461-6263-4261-b561-303739383461__1761219557.png',
-        'tild3337-6330-4763-b731-613135643030__noroot.png',
-        'tild3637-3631-4331-a132-613466393231___dsc3098_dxo.jpg',
-        'tild6465-3130-4538-b865-633833386533__1761218282.png',
-        'tild3533-3365-4234-a533-626466623135__1761219237.png',
-        'tild6531-6536-4164-b834-336532366564__whatsapp_image_2025-.jpeg',
-        'tild6335-3765-4264-a634-373432363935__1761219557.png',
-        'tild6334-3233-4436-a262-613464643433__noroot.png',
-        'tild3130-6563-4566-b437-323833303731___dsc3098_dxo.jpg',
-        'tild3233-3339-4664-b963-633731643561__1761218282.png',
-        'tild3339-3333-4563-b131-323262336262__1761219237.png',
-        'tild3939-3130-4463-b831-303235663834__whatsapp_image_2025-.jpeg',
-        'tild6564-3735-4434-a235-363032333563__photo.png',
-        'tild6465-3561-4739-a566-306661643863____01.png',
-        'tild3430-3366-4265-a137-383565393334____01.png',
-        'tild3738-3364-4330-b934-653363363536____01.png',
-        'tild6364-6366-4634-a563-613733623363____01.png',
-        'tild3032-3435-4537-b931-646236643631____01.png',
-        'tild3731-6332-4965-b636-343966373663__photo.png',
-        'tild6562-6635-4432-a662-653762646133__photo.svg',
-    ],
-    'center': [
-        'tild3638-3835-4337-a235-316331663938__22222.jpg',
-        'tild3039-3739-4238-a438-363833383939__948172ac-2e53-49b1-b.png',
-        'tild6365-3363-4336-a166-343633366164__3697448c-3669-4589-b.png',
-        'tild3065-3931-4163-b933-323664303339__edff5fa7-b83d-4ba7-a.png',
-        'tild3461-6263-4261-b561-303739383461__1761219557.png',
-        'tild3337-6330-4763-b731-613135643030__noroot.png',
-        'tild3637-3631-4331-a132-613466393231___dsc3098_dxo.jpg',
-        'tild6465-3130-4538-b865-633833386533__1761218282.png',
-        'tild3533-3365-4234-a533-626466623135__1761219237.png',
-        'tild6531-6536-4164-b834-336532366564__whatsapp_image_2025-.jpeg',
-    ],
-    'license': [
-        'tild3566-6263-4266-b164-363262666431__df4cf50f-7029-4998-a.png',
-        'tild3465-6332-4764-b032-303239396663__9d2b3122-2600-403a-b.png',
-    ],
-    'employees': [
-        'tild3466-6138-4739-b831-356134343835__no.png',
-        'tild3332-3864-4866-a431-663534376631__no.png',
-        'tild3937-6462-4861-b264-393837623363__no.png',
-        'tild6465-3561-4739-a566-306661643863____01.png',
-        'tild3430-3366-4265-a137-383565393334____01.png',
-        'tild3137-3134-4864-b930-323862326564__nopng.webp',
-        'tild3738-3364-4330-b934-653363363536____01.png',
-        'tild6364-6366-4634-a563-613733623363____01.png',
-        'tild3032-3435-4537-b931-646236643631____01.png',
-    ],
-    'missions': [
-        'tild6630-6338-4663-b431-316133376262__363a682f-3ed9-4b6d-9.png',
-        'tild3333-3437-4263-b738-303362373030__d0ef74d4-894b-43fe-9.png',
-        'tild3230-3866-4939-b135-393338396133__cf1ffb3e-7e91-458a-a.png',
-        'tild3333-3038-4235-b230-326130336637__27d8e191-5dad-41d6-8.png',
-        'tild6433-6531-4664-b431-643439636466__edf064f0-742b-47f9-b.png',
-    ],
-    'system': [
-        'tild6464-3036-4664-a639-316435636665__photo.svg',
-    ],
-    'areaswork': [
-        'tild3266-3865-4564-b030-383934323331__fc724a3a-f525-455c-9.png',
-        'tild6233-6265-4664-b466-333766306662__dd0d11b5-9599-4b3e-b.png',
-        'tild3761-6361-4138-b739-356436386332__3d812050-a3a8-4878-8.png',
-        'tild3038-3631-4839-b466-643839353237__8c07819d-3875-4bdb-8.png',
-        'tild6362-6365-4139-a333-383335313761__f5fd7915-2e4d-40fc-8.png',
-        'tild6261-3239-4137-b436-336338623036__af3be825-46ef-4c5b-b.png',
-        'tild6535-6133-4638-a337-316436643636__b562e266-71ad-457a-b.png',
-        'tild6466-6339-4633-a661-383465303263__14668832-39d0-4435-b.png',
-        'tild3261-3638-4164-a465-623662333931__931bb182-381b-4af3-a.png',
-        'tild3031-6533-4430-b433-616266613531__frame_100.png',
-        'tild3465-3230-4132-b233-393137313861__d921ae0b-1f7d-4d9e-8.png',
-        'tild6264-6564-4334-b938-333731343631__photo.svg',
-    ],
-    'volunteers': [
-        'tild6461-3938-4231-b839-633338303635__group_603.png',
-    ],
-    'contacts': [
-        'tild3731-6332-4965-b636-343966373663__photo.png',
-        'tild6365-6530-4066-b939-386434366535__photo.svg',
-    ],
-    'docs': [
-        'tild3364-3365-4762-b561-613039393038__2026-02-04_14-37-11.png',
-        'tild3731-6332-4965-b636-343966373663__photo.png',
-        'tild6365-6530-4066-b939-386434366535__photo.svg',
-    ],
-    'issledovaniya-bioekvivalentnosti': [
-        'tild3364-6638-4234-b464-663739363262__view-laboratory-test.png',
-        'tild6365-3634-4665-a232-336332666338__2026-04-15_11-45-15.png',
-        'tild3666-6565-4034-b537-396337316236__9a35c1aa-05cd-4788-9.png',
-    ],
-    'en': [
-        'tild3535-6332-4563-b965-633434396262__5199648934123928083.jpg',
-        'tild6663-3734-4361-a366-626531396138__391052fb-bb3f-47df-b.png',
-        'tild6132-3962-4566-a462-653130306265__photo.png',
-        'tild3536-3038-4663-a131-653233633332__photo.png',
-        'tild6465-3130-4765-b631-663861396362__12.png',
-        'tild3462-6538-4339-a562-366233623635__photo.png',
-        'tild3963-3561-4437-a664-396564393863__photo.png',
-        'tild3663-3934-4832-b462-336432643537___.png',
-        'tild3461-6263-4261-b561-303739383461__1761219557.png',
-        'tild3337-6330-4763-b731-613135643030__noroot.png',
-        'tild3637-3631-4331-a132-613466393231___dsc3098_dxo.jpg',
-        'tild6465-3130-4538-b865-633833386533__1761218282.png',
-        'tild3533-3365-4234-a533-626466623135__1761219237.png',
-        'tild6531-6536-4164-b834-336532366564__whatsapp_image_2025-.jpeg',
-        'tild6465-3561-4739-a566-306661643863____01.png',
-        'tild3430-3366-4265-a137-383565393334____01.png',
-        'tild3738-3364-4330-b934-653363363536____01.png',
-        'tild3732-3832-4732-b865-313965393664____01.png',
-        'tild6364-6366-4634-a563-613733623363____01.png',
-        'tild3032-3435-4537-b931-646236643631____01.png',
-        'tild6562-6635-4432-a662-653762646133__photo.svg',
-        'tild3731-6332-4965-b636-343966373663__photo.png',
-    ],
-    'center-en': [
-        'tild6632-3139-4437-a436-663736306634__wtynh.png',
-        'tild3039-3739-4238-a438-363833383939__948172ac-2e53-49b1-b.png',
-        'tild6365-3363-4336-a166-343633366164__3697448c-3669-4589-b.png',
-        'tild3065-3931-4163-b933-323664303339__edff5fa7-b83d-4ba7-a.png',
-        'tild3461-6263-4261-b561-303739383461__1761219557.png',
-        'tild3337-6330-4763-b731-613135643030__noroot.png',
-        'tild3637-3631-4331-a132-613466393231___dsc3098_dxo.jpg',
-        'tild6465-3130-4538-b865-633833386533__1761218282.png',
-        'tild3533-3365-4234-a533-626466623135__1761219237.png',
-        'tild6531-6536-4164-b834-336532366564__whatsapp_image_2025-.jpeg',
-    ],
-    'license-en': [
-        'tild3566-6263-4266-b164-363262666431__df4cf50f-7029-4998-a.png',
-        'tild3465-6332-4764-b032-303239396663__9d2b3122-2600-403a-b.png',
-    ],
-    'employees-en': [
-        'tild6465-3561-4739-a566-306661643863____01.png',
-        'tild3430-3366-4265-a137-383565393334____01.png',
-        'tild3732-3832-4732-b865-313965393664____01.png',
-        'tild3738-3364-4330-b934-653363363536____01.png',
-        'tild6364-6366-4634-a563-613733623363____01.png',
-        'tild3032-3435-4537-b931-646236643631____01.png',
-    ],
-    'missions-en': [
-        'tild6630-6338-4663-b431-316133376262__363a682f-3ed9-4b6d-9.png',
-        'tild3333-3437-4263-b738-303362373030__d0ef74d4-894b-43fe-9.png',
-        'tild3230-3866-4939-b135-393338396133__cf1ffb3e-7e91-458a-a.png',
-        'tild3333-3038-4235-b230-326130336637__27d8e191-5dad-41d6-8.png',
-        'tild6433-6531-4664-b431-643439636466__edf064f0-742b-47f9-b.png',
-    ],
-    'contacts-en': [
-        'tild6365-6530-4066-b939-386434366535__photo.svg',
-        'tild3731-6332-4965-b636-343966373663__photo.png',
-    ],
-}
-
-for slug, filenames in TILDA_PAGE_IMAGES.items():
-    if filenames and slug in PAGES:
-        PAGES[slug]['sections'].append(
-            source_image_section(PAGES[slug]['language'], filenames)
-        )
 
 PAGE_ORDER = list(PAGES.keys())
 
