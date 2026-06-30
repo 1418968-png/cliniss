@@ -686,6 +686,15 @@ img {
     grid-column: 1 / -1;
 }
 
+.lead-form__website {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
 .form-control,
 .search-page input {
     width: 100%;

@@ -18,6 +18,14 @@ class PageRouteTests(TestCase):
                 response = self.client.get(path)
                 self.assertEqual(response.status_code, 200)
 
+    def test_security_headers_are_set(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("default-src 'self'", response['Content-Security-Policy'])
+        self.assertIn("form-action 'self'", response['Content-Security-Policy'])
+        self.assertEqual(response['Permissions-Policy'], 'camera=(), geolocation=(), microphone=(), payment=(), usb=()')
+        self.assertEqual(response['Cross-Origin-Opener-Policy'], 'same-origin')
+
     def test_public_pages_with_trailing_slash_redirect_to_canonical_urls(self):
         for slug in PAGE_ORDER:
             if slug == '':
