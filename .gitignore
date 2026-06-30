@@ -7,6 +7,9 @@ media/
 tmp-screens/
 build/
 dist/
+cliniss-tests.log
+cliniss-site.log
+cliniss-site.sqlite3
 .env
 .pytest_cache/
 .coverage
